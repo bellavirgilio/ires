@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class Path : MonoBehaviour {
 
-    public Color lineColor;
-
     private List<Transform> nodes = new List<Transform>();
 
-    private void OnDrawGizmos()
+    public Transform target;
+
+    void OnDrawGizmosSelected()
     {
-        Gizmos.color = lineColor;
+        Gizmos.color = Color.white;
 
         Transform[] pathTransforms = GetComponentsInChildren<Transform>();
-        nodes = new List<Transform>();
+        Debug.Log("pathTransforms.Length ex: 12 actual: " + pathTransforms.Length);
+
+        //nodes = new List<Transform>();
+
+        //Debug.Log("nodes: " + nodes);
 
         for (int i = 0; i < pathTransforms.Length; i++)
         {
@@ -22,6 +26,8 @@ public class Path : MonoBehaviour {
                 nodes.Add(pathTransforms[i]);
             }
         }
+
+        //Debug.Log("node count: " + nodes.Count);
 
         for (int i = 0; i < nodes.Count; i++) {
             Vector3 currentNode = nodes[i].position;
@@ -34,6 +40,7 @@ public class Path : MonoBehaviour {
             }
 
             Gizmos.DrawLine(previousNode, currentNode);
+            Gizmos.DrawWireSphere(currentNode, 1);
         }
     }
 }
