@@ -35,18 +35,23 @@ public class WheelDrive : MonoBehaviour
     // Find all the WheelColliders down in the hierarchy.
 	void Start()
 	{
-		m_Wheels = GetComponentsInChildren<WheelCollider>();
+        Debug.Log("We are in start()");
+
+        m_Wheels = GetComponentsInChildren<WheelCollider>();
+
+        Debug.Log("we have " + m_Wheels.Length + " wheels");
+
 
 		for (int i = 0; i < m_Wheels.Length; ++i) 
 		{
 			var wheel = m_Wheels [i];
 
 			// Create wheel shapes only when needed.
-			if (wheelShape != null)
-			{
+			//if (wheelShape != null)
+			//{
 				var ws = Instantiate (wheelShape);
 				ws.transform.parent = wheel.transform;
-			}
+			//}
 		}
 	}
 
@@ -55,7 +60,8 @@ public class WheelDrive : MonoBehaviour
 	// This helps us to figure our which wheels are front ones and which are rear.
 	void Update()
 	{
-		m_Wheels[0].ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
+
+        m_Wheels[0].ConfigureVehicleSubsteps(criticalSpeed, stepsBelow, stepsAbove);
 
 		float angle = maxAngle * Input.GetAxis("Horizontal");
 		float torque = maxTorque * Input.GetAxis("Vertical");

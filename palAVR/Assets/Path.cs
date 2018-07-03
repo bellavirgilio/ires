@@ -13,7 +13,7 @@ public class Path : MonoBehaviour {
         Gizmos.color = Color.white;
 
         Transform[] pathTransforms = GetComponentsInChildren<Transform>();
-        Debug.Log("pathTransforms.Length ex: 12 actual: " + pathTransforms.Length);
+        //Debug.Log("pathTransforms.Length ex: 12 actual: " + pathTransforms.Length);
 
         //nodes = new List<Transform>();
 
