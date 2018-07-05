@@ -8,7 +8,7 @@ half _GerstnerIntensity;
 
 inline half3 PerPixelNormal(sampler2D bumpMap, half4 coords, half3 vertexNormal, half bumpStrength) 
 {
-	half3 bump = (UnpackNormal(tex2D(bumpMap, coords.xy)) + UnpackNormal(tex2D(bumpMap, coords.zw))) * 0.5;
+	half3 bump = (UnpackNormal(tex2D(bumpMap, coords.xy)));// +UnpackNormal(tex2D(bumpMap, coords.zw))) * 0.5;
 	half3 worldNormal = vertexNormal + bump.xxy * bumpStrength * half3(1,0,1);
 	return normalize(worldNormal);
 } 
@@ -71,7 +71,7 @@ inline void ComputeScreenAndGrabPassPos (float4 pos, out float4 screenPos, out f
 		float scale = 1.0f;
 	#endif
 	
-	screenPos = ComputeNonStereoScreenPos(pos); 
+	screenPos = ComputeScreenPos(pos); 
 	grabPassPos.xy = ( float2( pos.x, pos.y*scale ) + pos.w ) * 0.5;
 	grabPassPos.zw = pos.zw;
 }

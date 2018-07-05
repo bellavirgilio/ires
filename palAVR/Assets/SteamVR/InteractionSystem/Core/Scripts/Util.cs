@@ -675,7 +675,7 @@ namespace Valve.VR.InteractionSystem
 				string combinedPath = paths[0];
 				for ( int i = 1; i < paths.Length; i++ )
 				{
-                    combinedPath = System.IO.Path.Combine( combinedPath, paths[i] );
+					combinedPath = Path.Combine( combinedPath, paths[i] );
 				}
 
 				return combinedPath;

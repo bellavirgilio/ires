@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
 Shader "FX/SimpleWater4" {
 Properties {
 	_ReflectionTex ("Internal reflection", 2D) = "white" {}
@@ -250,7 +248,7 @@ CGINCLUDE
 
 		o.pos = UnityObjectToClipPos(v.vertex);
 
-		o.screenPos = ComputeNonStereoScreenPos(o.pos);
+		o.screenPos = ComputeScreenPos(o.pos);
 		
 		o.normalInterpolator.xyz = nrml;
 		
@@ -317,7 +315,7 @@ CGINCLUDE
 
 		o.viewInterpolator.xyz = worldSpaceVertex-_WorldSpaceCameraPos;
 		
-		o.pos = UnityObjectToClipPos( v.vertex);
+		o.pos = UnityObjectToClipPos(v.vertex);
 		
 		UNITY_TRANSFER_FOG(o,o.pos);
 		return o;

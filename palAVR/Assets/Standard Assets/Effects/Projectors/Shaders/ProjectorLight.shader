@@ -1,6 +1,3 @@
-// Upgrade NOTE: replaced '_Projector' with 'unity_Projector'
-// Upgrade NOTE: replaced '_ProjectorClip' with 'unity_ProjectorClip'
-
 Shader "Projector/Light" {
 	Properties {
 		_Color ("Main Color", Color) = (1,1,1,1)
@@ -35,7 +32,7 @@ Shader "Projector/Light" {
 			v2f vert (float4 vertex : POSITION)
 			{
 				v2f o;
-				o.pos = UnityObjectToClipPos(vertex);
+				o.pos = UnityObjectToClipPos (vertex);
 				o.uvShadow = mul (unity_Projector, vertex);
 				o.uvFalloff = mul (unity_ProjectorClip, vertex);
 				UNITY_TRANSFER_FOG(o,o.pos);

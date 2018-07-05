@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
 Shader "FX/Water4" {
 Properties {
 	_ReflectionTex ("Internal reflection", 2D) = "white" {}
@@ -82,6 +80,7 @@ CGINCLUDE
 
 	// textures
 	sampler2D _BumpMap;
+	float4  _BumpMap_ST;
 	sampler2D _ReflectionTex;
 	sampler2D _RefractionTex;
 	sampler2D _ShoreTex;
@@ -153,6 +152,7 @@ CGINCLUDE
 		half2 tileableUv = mul(unity_ObjectToWorld,(v.vertex)).xz;
 		
 		o.bumpCoords.xyzw = (tileableUv.xyxy + _Time.xxxx * _BumpDirection.xyzw) * _BumpTiling.xyzw;
+		o.bumpCoords.xy = TRANSFORM_TEX(v.texcoord, _BumpMap);
 
 		o.viewInterpolator.xyz = worldSpaceVertex - _WorldSpaceCameraPos;
 
@@ -172,6 +172,7 @@ CGINCLUDE
 	half4 frag( v2f i ) : SV_Target
 	{
 		half3 worldNormal = PerPixelNormal(_BumpMap, i.bumpCoords, VERTEX_WORLD_NORMAL, PER_PIXEL_DISPLACE);
+		//half3 worldNormal = PerPixelNormal(_BumpMap, i.bumpCoords, VERTEX_WORLD_NORMAL, half2(0,0));
 		half3 viewVector = normalize(i.viewInterpolator.xyz);
 
 		half4 distortOffset = half4(worldNormal.xz * REALTIME_DISTORTION * 10.0, 0, 0);
@@ -199,7 +200,7 @@ CGINCLUDE
 		half4 edgeBlendFactors = half4(1.0, 0.0, 0.0, 0.0);
 		
 		#ifdef WATER_EDGEBLEND_ON
-			float depth = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.screenPos));
+			half depth = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.screenPos));
 			depth = LinearEyeDepth(depth);
 			edgeBlendFactors = saturate(_InvFadeParemeter * (depth-i.screenPos.w));
 			edgeBlendFactors.y = 1.0-edgeBlendFactors.y;
@@ -207,7 +208,7 @@ CGINCLUDE
 		
 		// shading for fresnel term
 		worldNormal.xz *= _FresnelScale;
-		half refl2Refr = Fresnel(viewVector, worldNormal, FRESNEL_BIAS, FRESNEL_POWER);
+		half refl2Refr = 1.0f; Fresnel(viewVector, worldNormal, FRESNEL_BIAS, FRESNEL_POWER);
 		
 		// base, depth & reflection colors
 		half4 baseColor = ExtinctColor (_BaseColor, i.viewInterpolator.w * _InvFadeParemeter.w);
@@ -216,7 +217,12 @@ CGINCLUDE
 		#else
 			half4 reflectionColor = _ReflectionColor;
 		#endif
-		
+			
+			reflectionColor = reflectionColor * 5 + (reflectionColor*reflectionColor) * 3;
+
+			// hacky way to squash super bright areas down wihtout capping them
+			reflectionColor = min(reflectionColor, 10) + -((min(reflectionColor, 10) - reflectionColor)*0.06);
+
 		baseColor = lerp (lerp (rtRefractions, baseColor, baseColor.a), reflectionColor, refl2Refr);
 		baseColor = baseColor + spec * _SpecularColor;
 		
@@ -224,8 +230,10 @@ CGINCLUDE
 		half4 foam = Foam(_ShoreTex, i.bumpCoords * 2.0);
 		baseColor.rgb += foam.rgb * _Foam.x * (edgeBlendFactors.y + saturate(i.viewInterpolator.w - _Foam.y));
 		
+		
 		baseColor.a = edgeBlendFactors.x;
-		UNITY_APPLY_FOG(i.fogCoord, baseColor);
+		baseColor.a = 1;
+		//UNITY_APPLY_FOG(i.fogCoord, baseColor);
 		return baseColor;
 	}
 	
@@ -262,11 +270,12 @@ CGINCLUDE
 
 		o.pos = UnityObjectToClipPos(v.vertex);
 
-		o.screenPos = ComputeNonStereoScreenPos(o.pos);
+		o.screenPos = ComputeScreenPos(o.pos);
 		
 		o.normalInterpolator.xyz = nrml;
 		o.normalInterpolator.w = 1;//GetDistanceFadeout(o.screenPos.w, DISTANCE_SCALE);
 		
+
 		UNITY_TRANSFER_FOG(o,o.pos);
 		return o;
 	}
@@ -311,7 +320,9 @@ CGINCLUDE
 		baseColor = baseColor + spec * _SpecularColor;
 		
 		baseColor.a = edgeBlendFactors.x * saturate(0.5 + refl2Refr * 1.0);
+		
 		UNITY_APPLY_FOG(i.fogCoord, baseColor);
+		//return float4(1,1,1,1);
 		return baseColor;
 	}
 	
@@ -330,9 +341,9 @@ CGINCLUDE
 
 		o.viewInterpolator.xyz = worldSpaceVertex-_WorldSpaceCameraPos;
 		
-		o.pos = UnityObjectToClipPos( v.vertex);
+		o.pos = UnityObjectToClipPos(v.vertex);
 		
-		o.viewInterpolator.w = 1;//GetDistanceFadeout(ComputeNonStereoScreenPos(o.pos).w, DISTANCE_SCALE);
+		o.viewInterpolator.w = 1;//GetDistanceFadeout(ComputeScreenPos(o.pos).w, DISTANCE_SCALE);
 		
 		UNITY_TRANSFER_FOG(o,o.pos);
 		return o;
@@ -358,6 +369,7 @@ CGINCLUDE
 
 		baseColor.rgb += spec * _SpecularColor.rgb;
 		UNITY_APPLY_FOG(i.fogCoord, baseColor);
+		
 		return baseColor;
 	}
 	

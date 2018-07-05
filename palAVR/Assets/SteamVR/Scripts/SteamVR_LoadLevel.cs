@@ -340,7 +340,7 @@ public class SteamVR_LoadLevel : MonoBehaviour
 			else
 			{
 				var workingDirectory = Directory.GetCurrentDirectory();
-                var fullPath = System.IO.Path.Combine(workingDirectory, internalProcessPath);
+				var fullPath = Path.Combine(workingDirectory, internalProcessPath);
 				Debug.Log("LaunchingInternalProcess");
 				Debug.Log("ExternalAppPath = " + internalProcessPath);
 				Debug.Log("FullPath = " + fullPath);
@@ -403,8 +403,6 @@ public class SteamVR_LoadLevel : MonoBehaviour
 		// Fade out to compositor
 		SteamVR_Events.LoadingFadeIn.Send(fadeInTime);
 
-		// Refresh compositor reference since loading scenes might have invalidated it.
-		compositor = OpenVR.Compositor;
 		if (compositor != null)
 		{
 			// Fade out foreground color if necessary.
