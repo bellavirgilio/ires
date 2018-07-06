@@ -54,6 +54,8 @@ namespace UnityStandardAssets.Water
 
         public void OnWillRenderObject()
         {
+			if (!Camera.current.enabled)
+				return;
             if (reflection)
             {
                 reflection.WaterTileBeingRendered(transform, Camera.current);
