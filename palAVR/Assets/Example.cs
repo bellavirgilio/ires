@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 
 public class Example : MonoBehaviour {
-    
+
 	// Use this for initialization
 	void Start () {
         //DOTweenPath newPath = new DOTweenPath();
@@ -21,7 +21,8 @@ public class Example : MonoBehaviour {
         Debug.Log("Collider entered");
         if (col.gameObject.name == "Hydrant")
         {
-            Debug.Log("Object detected. Pausing path.");
+            Debug.Log("Object detected. Slowing down.");
+            // DOTween.timeScale = 0.5f;
             DOTween.PauseAll();
         }
     }
