@@ -2,13 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using LockingPolicy = Thalmic.Myo.LockingPolicy;
+using Pose = Thalmic.Myo.Pose;
+using UnlockType = Thalmic.Myo.UnlockType;
+using VibrationType = Thalmic.Myo.VibrationType;
+
 public class LightPanelController : MonoBehaviour {
 
-    public float lastX;
-    public float lastZ;
-    public float lastSpeed;
-    public float currentSpeed;
-    public float deltaSpeed;
+    private float lastX;
+    private float lastZ;
+    private float lastSpeed;
+    private float currentSpeed;
+    private float deltaSpeed;
+
+    private bool slowing = false;
+
+    public GameObject myo;
+    // private Pose _lastPose = Pose.Unknown;
 
 	// Use this for initialization
 	void Start () {
@@ -20,7 +30,7 @@ public class LightPanelController : MonoBehaviour {
 	void Update () {
         currentSpeed = GetDistance(transform.position.x, lastX, transform.position.z, lastZ) * 60f;
         deltaSpeed = currentSpeed - lastSpeed;
-        Debug.Log("Delta Speed: " + deltaSpeed);
+        // Debug.Log("Delta Speed: " + deltaSpeed);
         lastSpeed = currentSpeed;
 
         this.LightColor();
@@ -39,15 +49,20 @@ public class LightPanelController : MonoBehaviour {
         Light leftLight = GameObject.Find("LeftLight").GetComponent<Light>();
         Light rightLight = GameObject.Find("RightLight").GetComponent<Light>();
 
-        if (deltaSpeed < 0) { // if the car is slowing down
+        ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo>();
+
+        if (thalmicMyo.pose == Pose.FingersSpread)
+        {
+            slowing = true;
             panel.SetColor("_EmissionColor", Color.yellow);
             leftLight.color = Color.yellow;
             rightLight.color = Color.yellow;
-        } if (deltaSpeed < 0.000001f && deltaSpeed > -0.000001f) { // if the car is stopped
+        }
+        else if (deltaSpeed < 0.000001f && deltaSpeed > -0.000001f) { // if the car is stopped
             panel.SetColor("_EmissionColor", Color.green);
             leftLight.color = Color.green;
             rightLight.color = Color.green;
-        } else {
+        } else if (!slowing) { // if the car is not slowing down and not stopped
             panel.SetColor("_EmissionColor", Color.red);
             leftLight.color = Color.red;
             rightLight.color = Color.red;

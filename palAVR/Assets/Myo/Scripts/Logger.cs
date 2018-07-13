@@ -9,10 +9,10 @@ using UnlockType = Thalmic.Myo.UnlockType;
 using VibrationType = Thalmic.Myo.VibrationType;
 
 public class Logger : MonoBehaviour {
-
+    
     // Myo game object to connect with.
     // This object must have a ThalmicMyo script attached.
-    public GameObject myo = null;
+    public GameObject myo;
 
     // The pose from the last update. This is used to determine if the pose has changed
     // so that actions are only performed upon making them rather than every frame during
@@ -59,15 +59,15 @@ public class Logger : MonoBehaviour {
 
     // Extend the unlock if ThalmcHub's locking policy is standard, and notifies the given myo that a user action was
     // recognized.
-    void ExtendUnlockAndNotifyUserAction(ThalmicMyo myo)
+    void ExtendUnlockAndNotifyUserAction(ThalmicMyo myo1)
     {
         ThalmicHub hub = ThalmicHub.instance;
 
         if (hub.lockingPolicy == LockingPolicy.Standard)
         {
-            myo.Unlock(UnlockType.Timed);
+            myo1.Unlock(UnlockType.Timed);
         }
 
-        myo.NotifyUserAction();
+        myo1.NotifyUserAction();
     }
 }
