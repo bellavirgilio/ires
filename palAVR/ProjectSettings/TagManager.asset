@@ -7,6 +7,8 @@ TagManager:
   - Light2
   - left
   - right
+  - car_south
+  - car_north
   layers:
   - Default
   - TransparentFX

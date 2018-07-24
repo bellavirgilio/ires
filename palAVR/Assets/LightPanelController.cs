@@ -66,6 +66,7 @@ public class LightPanelController : MonoBehaviour {
             panel.SetColor("_EmissionColor", Color.green);
             leftLight.color = Color.green;
             rightLight.color = Color.green;
+            slowing = false;
         } else if (!slowing) { // if the car is not slowing down and not stopped
             panel.SetColor("_EmissionColor", Color.red);
             leftLight.color = Color.red;
