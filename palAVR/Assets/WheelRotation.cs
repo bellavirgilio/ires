@@ -30,8 +30,13 @@ public class WheelRotation : MonoBehaviour {
 
         // update runs 60 times per second
 
+        if (gameObject.tag == "left") {
+            transform.Rotate(Time.deltaTime * wheelRevsPerSec * -200f, 0, 0);
+        } if (gameObject.tag == "right") {
+            transform.Rotate(Time.deltaTime * wheelRevsPerSec * 200f, 0, 0);
+        }
         // rotates around local X axis at 200 degrees per second
-        transform.Rotate(Time.deltaTime * wheelRevsPerSec * -200f, 0, 0);
+
         lastCarPositionX = transform.position.x;
         lastCarPositionZ = transform.position.z;
         lastSpeed = speed;

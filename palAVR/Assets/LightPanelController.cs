@@ -54,11 +54,15 @@ public class LightPanelController : MonoBehaviour {
         if (thalmicMyo.pose == Pose.FingersSpread)
         {
             slowing = true;
+            //Debug.Log("Slowing begins: ");
+        } if (slowing) {
             panel.SetColor("_EmissionColor", Color.yellow);
             leftLight.color = Color.yellow;
             rightLight.color = Color.yellow;
+            //Debug.Log("DeltaSpeed: " + deltaSpeed);
         }
-        else if (deltaSpeed < 0.000001f && deltaSpeed > -0.000001f) { // if the car is stopped
+        if (deltaSpeed < 0.000001f && deltaSpeed > -0.000001f) { // if the car is stopped
+            //Debug.Log("Stopped");
             panel.SetColor("_EmissionColor", Color.green);
             leftLight.color = Color.green;
             rightLight.color = Color.green;
