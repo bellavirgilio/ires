@@ -9,6 +9,9 @@ TagManager:
   - right
   - car_south
   - car_north
+  - PedCamera
+  - ZoneA
+  - ZoneB
   layers:
   - Default
   - TransparentFX
