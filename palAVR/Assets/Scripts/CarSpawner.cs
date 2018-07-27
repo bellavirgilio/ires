@@ -14,6 +14,10 @@ public class CarSpawner : MonoBehaviour {
     public float spawnTime;
     public float spawnDelay;
 
+    private int totalCars;
+    private int numFastCars;
+    private int numNormalCars;
+
     private void Start()
     {
         InvokeRepeating("SpawnObject", spawnTime, spawnDelay);
@@ -22,9 +26,6 @@ public class CarSpawner : MonoBehaviour {
     public void SpawnObject()
     {
         int random = Random.Range(1, 3);
-        int totalCars = 0;
-        int numFastCars = 0;
-        int numNormalCars = 0;
 
         if (totalCars < 8)
         {
@@ -39,22 +40,30 @@ public class CarSpawner : MonoBehaviour {
                 {
                     Instantiate(gestureCar, transform.position, transform.rotation);
                     numNormalCars++;
+                    totalCars++;
+                    Debug.Log("Gesture car deployed\nSpeed: Normal\nNumber of cars deployed: " + totalCars + "\nNumber of normal cars: " + numNormalCars);
                 }
                 if (random == 2) // generates a fast gesture car
                 {
                     Instantiate(gestureCar_fast, transform.position, transform.rotation);
                     numFastCars++;
+                    totalCars++;
+                    Debug.Log("Gesture car deployed\nSpeed: Fast\nNumber of cars deployed: " + totalCars + "\nNumber of normal cars: " + numFastCars);
                 }
             } else {
                 if (random == 1) // generates a normal sensor car
                 {
                     Instantiate(sensorCar, transform.position, transform.rotation);
                     numNormalCars++;
+                    totalCars++;
+                    Debug.Log("Sensor car deployed\nSpeed: Normal\nNumber of cars deployed: " + totalCars + "\nNumber of normal cars: " + numNormalCars);
                 }
                 if (random == 2) // generates a fast sensor car
                 {
                     Instantiate(sensorCar_fast, transform.position, transform.rotation);
                     numFastCars++;
+                    totalCars++;
+                    Debug.Log("Sensor car deployed\nSpeed: Fast\nNumber of cars deployed: " + totalCars + "\nNumber of normal cars: " + numFastCars);
                 }
             }
         } else {

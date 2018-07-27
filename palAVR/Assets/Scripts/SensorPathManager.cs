@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System.Diagnostics;
+using System;
 
 public class SensorPathManager : MonoBehaviour {
 
@@ -9,7 +11,7 @@ public class SensorPathManager : MonoBehaviour {
     public Sequence sequence1;
     public Sequence sequence2;
 
-    // public Transform pedestrian; // needs to be SteamVR/[CameraRig], use PedPlaceholder for now
+    // private Transform pedestrian; // needs to be SteamVR/[CameraRig], use PedPlaceholder for now
     private float pedX;
     private float pedZ;
     private float stopX;
@@ -43,6 +45,9 @@ public class SensorPathManager : MonoBehaviour {
     public Light leftLight;
     public Light rightLight;
 
+    // for timing a car loop. needed to set delays/intervals
+    private Stopwatch stopwatch = new Stopwatch();
+
     void Start()
     {
         panel = GameObject.Find("LightPanel").GetComponent<Renderer>().material;
@@ -55,19 +60,23 @@ public class SensorPathManager : MonoBehaviour {
         // pedX = pedestrian.position.x;
         // pedZ = pedestrian.position.z;
 
-        pedX = GameObject.Find("VRSimulatorCameraRig").transform.position.x;
-        pedZ = GameObject.Find("VRSimulatorCameraRig").transform.position.z;
+        // pedX = GameObject.Find("VRSimulatorCameraRig").transform.position.x;
+        // pedZ = GameObject.Find("VRSimulatorCameraRig").transform.position.z;
 
         if (gameObject.tag.Equals("car_north"))
         {
-            stopX = pedX + 3.5f;
-            stopZ = pedZ + 7f;
+            stopX = -2f;
+            // stopX = pedX + 3.5f;
+            stopZ = 46.7f;
+            //stopZ = pedZ + 7f;
             stop = new Vector3(stopX, 0.5f, stopZ);
         }
         if (gameObject.tag.Equals("car_south"))
         {
-            stopX = pedX + 7f;
-            stopZ = pedZ - 7f;
+            stopX = 2f;
+            //stopX = pedX + 7f;
+            stopZ = 0.5f;
+            //stopZ = pedZ - 7f;
             stop = new Vector3(stopX, 0.5f, stopZ);
         }
 
@@ -91,6 +100,7 @@ public class SensorPathManager : MonoBehaviour {
         // no gesture path (nonstop)
         Tween initial = transform.DOPath(waypoints4, nonstopPathTime, pathType).SetLookAt(0.01f); // nonstop tween
 
+        stopwatch.Start();
         sequence1 = DOTween.Sequence();
         sequence1.Append(initial);
     }
@@ -102,10 +112,7 @@ public class SensorPathManager : MonoBehaviour {
     }
 
     public void OnTriggerEnter(Collider col) {
-        if (col.gameObject.tag.Equals("PedCamera")) {
-            sensed = true;
-            //Debug.Log("Collider entered"); 
-        }
+        sensed |= col.gameObject.tag.Equals("PedCamera");
     }
 
     void Update()
@@ -135,14 +142,25 @@ public class SensorPathManager : MonoBehaviour {
             waypoints3 = new[] { stop, new Vector3(2f, 0.5f, 65.3f), new Vector3(2f, 0.5f, 123.9922f), new Vector3(1.934553f, 0.5f, 126.453f), new Vector3(2.506611f, 0.5f, 128.8034f), new Vector3(4.788719f, 0.5f, 130.0849f), new Vector3(24.65626f, 0.5f, 130.2603f), new Vector3(34.32539f, 0.5f, 128.3672f), new Vector3(39.57445f, 0.5f, 125.626f), new Vector3(43.88325f, 0.5f, 122.8066f), new Vector3(48.01571f, 0.5f, 118.5967f), new Vector3(50.43028f, 0.5f, 113.5117f), new Vector3(52.45807f, 0.5f, 108.1045f), new Vector3(52.84766f, 0.5f, 85.06738f), new Vector3(53.3808f, 0.5f, -13.21484f), new Vector3(51.85156f, 0.5f, -19.78284f), new Vector3(50.73828f, 0.5f, -25.1709f), new Vector3(47.67969f, 0.5f, -30.06952f), new Vector3(43.65625f, 0.5f, -34.58752f), new Vector3(40.13672f, 0.5f, -37.08124f), new Vector3(36.08203f, 0.5f, -39.28369f), new Vector3(32.60156f, 0.5f, -40.63574f), new Vector3(23.32813f, 0.5f, -42.41516f) };
         }
 
+        if (this.transform.position == new Vector3(-24.60913f, 0.5f, 129.6172f) || this.transform.position == new Vector3(23.32813f, 0.5f, -42.41516f))
+        {
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            ts.Hours, ts.Minutes, ts.Seconds,
+            ts.Milliseconds / 10);
+            UnityEngine.Debug.Log("Car loop time: " + elapsedTime);
+        }
+
         // Gesture control that prevents user from calling stop more than once
         if (sensed && stopCount == 0)
         {
             stopCount = 1;
-            Debug.Log("Stop called once. Stop count is 1.");
+            UnityEngine.Debug.Log("Stop called once. Stop count is 1.");
         }
 
         if (stopCount == 1)
+        // if (sensed)
         {
             // is only working for the lights on the first car
 
@@ -153,9 +171,9 @@ public class SensorPathManager : MonoBehaviour {
             Tween rYellow = rightLight.DOColor(Color.yellow, slowdownPathTime);
             Tween pYellow = panel.DOColor(Color.yellow, slowdownPathTime);
 
-            Debug.Log("Stop running.");
+            UnityEngine.Debug.Log("Stop running.");
             sequence1.Kill();
-            Debug.Log("Car should pause and slow down");
+            UnityEngine.Debug.Log("Car should pause and slow down");
             sequence2 = DOTween.Sequence();
             Tween slowdownPath = transform.DOPath(waypoints2, slowdownPathTime, pathType).SetLookAt(0.01f);
             Tween continuePath = transform.DOPath(waypoints3, continuePathTime, pathType).SetLookAt(0.01f);
@@ -176,7 +194,7 @@ public class SensorPathManager : MonoBehaviour {
             //sequence2.Insert(2, llYellowWarning);
             sequence2.Append(continuePath);
 
-            stopCount += 1;
+            stopCount++;
         }
     }
 }

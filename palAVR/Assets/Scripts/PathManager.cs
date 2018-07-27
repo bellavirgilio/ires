@@ -14,7 +14,7 @@ public class PathManager : MonoBehaviour {
     public Sequence sequence1;
     public Sequence sequence2;
 
-    // private Transform pedestrian; // needs to be SteamVR/[CameraRig], use PedPlaceholder for now
+    private Transform pedestrian; // needs to be SteamVR/[CameraRig], use PedPlaceholder for now
     private float pedX;
     private float pedZ;
     private float stopX;
@@ -63,16 +63,20 @@ public class PathManager : MonoBehaviour {
         //pedX = pedestrian.position.x;
         //pedZ = pedestrian.position.z;
 
-        pedX = GameObject.Find("VRSimulatorCameraRig").transform.position.x;
-        pedZ = GameObject.Find("VRSimulatorCameraRig").transform.position.z;
+        //pedX = GameObject.Find("VRSimulatorCameraRig").transform.position.x;
+        //pedZ = GameObject.Find("VRSimulatorCameraRig").transform.position.z;
 
         if (gameObject.tag.Equals("car_north")) {
-            stopX = pedX + 3.5f;
-            stopZ = pedZ + 7f;
+            stopX = -2f;
+            // stopX = pedX + 3.5f;
+            stopZ = 46.7f;
+            //stopZ = pedZ + 7f;
             stop = new Vector3(stopX, 0.5f, stopZ);
         } if (gameObject.tag.Equals("car_south")) {
-            stopX = pedX + 7f;
-            stopZ = pedZ - 7f;
+            stopX = 2f;
+            //stopX = pedX + 7f;
+            stopZ = 0.5f;
+            //stopZ = pedZ - 7f;
             stop = new Vector3(stopX, 0.5f, stopZ);
         }
 
