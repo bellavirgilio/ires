@@ -216,13 +216,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f49299ed1bcb74fd18e73a65ed6e0c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gesture: 1
+  gesture: 0
+  sensor: 0
+  driver: 1
+  sensorCar: {fileID: 1550522530716994, guid: 683a26b3d117c43c4bf8dfe7bfacaed2, type: 2}
   sensorCar_fast: {fileID: 1968521233685150, guid: 1ea7684ec9572481dbd49d875bc3ff86,
     type: 2}
-  sensorCar: {fileID: 1550522530716994, guid: 683a26b3d117c43c4bf8dfe7bfacaed2, type: 2}
+  gestureCar: {fileID: 1977418707134100, guid: e1521a9a9b591448aa49b81bf9f0daa1, type: 2}
   gestureCar_fast: {fileID: 1847457773713408, guid: 8f918e17558ea4458a8b7ec24febb316,
     type: 2}
-  gestureCar: {fileID: 1977418707134100, guid: e1521a9a9b591448aa49b81bf9f0daa1, type: 2}
+  driverCar: {fileID: 1603270993350278, guid: eb3e63709dcb24aeea9f62a4e7043b0e, type: 2}
+  driverCar_fast: {fileID: 1842499525287038, guid: beb196b6373b34ff288c95804906c5b6,
+    type: 2}
   spawnTime: 0
   spawnDelay: 80
 --- !u!4 &5656289
@@ -1446,13 +1451,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f49299ed1bcb74fd18e73a65ed6e0c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gesture: 1
+  gesture: 0
+  sensor: 0
+  driver: 1
+  sensorCar: {fileID: 1471089080024084, guid: 54da17ce2ed49435eb9449bdc3e205a4, type: 2}
   sensorCar_fast: {fileID: 1991398555804528, guid: 22fa3404d517842c189fa8acddd336a6,
     type: 2}
-  sensorCar: {fileID: 1471089080024084, guid: 54da17ce2ed49435eb9449bdc3e205a4, type: 2}
+  gestureCar: {fileID: 1919648625818978, guid: 378f1a61bbff845dda92a28c432afee9, type: 2}
   gestureCar_fast: {fileID: 1619114849952442, guid: 1c897b34698934fad8d8ee5d47a296d1,
     type: 2}
-  gestureCar: {fileID: 1919648625818978, guid: 378f1a61bbff845dda92a28c432afee9, type: 2}
+  driverCar: {fileID: 1137549315430858, guid: f021a0cae63384d428b3aa026ed25540, type: 2}
+  driverCar_fast: {fileID: 1834839767931744, guid: 8dea8756669e64a078534bbb66f47f05,
+    type: 2}
   spawnTime: 45
   spawnDelay: 80
 --- !u!4 &136917666
