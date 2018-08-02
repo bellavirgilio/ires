@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f49299ed1bcb74fd18e73a65ed6e0c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gesture: 0
+  gesture: 1
   sensorCar_fast: {fileID: 1968521233685150, guid: 1ea7684ec9572481dbd49d875bc3ff86,
     type: 2}
   sensorCar: {fileID: 1550522530716994, guid: 683a26b3d117c43c4bf8dfe7bfacaed2, type: 2}
@@ -1446,7 +1446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f49299ed1bcb74fd18e73a65ed6e0c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gesture: 0
+  gesture: 1
   sensorCar_fast: {fileID: 1991398555804528, guid: 22fa3404d517842c189fa8acddd336a6,
     type: 2}
   sensorCar: {fileID: 1471089080024084, guid: 54da17ce2ed49435eb9449bdc3e205a4, type: 2}
@@ -6467,7 +6467,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4421704745708670, guid: 931ecb32d754b3f40afc9a688c8cea66, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -60.1
+      value: -44.7
       objectReference: {fileID: 0}
     - target: {fileID: 4421704745708670, guid: 931ecb32d754b3f40afc9a688c8cea66, type: 2}
       propertyPath: m_LocalPosition.y
@@ -19857,7 +19857,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 28d375a433cc78c4fa3db00df795f14d, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -2.4
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 28d375a433cc78c4fa3db00df795f14d, type: 2}
       propertyPath: m_LocalPosition.z
