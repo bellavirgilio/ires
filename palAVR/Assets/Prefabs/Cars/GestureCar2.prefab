@@ -58,7 +58,6 @@ GameObject:
   - component: {fileID: 33535187273115624}
   - component: {fileID: 23406438385704888}
   - component: {fileID: 65565761982211960}
-  - component: {fileID: 114401152178655534}
   m_Layer: 0
   m_Name: LightPanel
   m_TagString: Untagged
@@ -308,7 +307,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 34a12df728295554fbfc96efc84aac90, type: 2}
   - {fileID: 2100000, guid: 5e5aaa0ee9a4ed240a3c38a87943b618, type: 2}
@@ -348,7 +346,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: e9b90d2e67f6dc443ba19bc1e8e9da2c, type: 2}
   - {fileID: 2100000, guid: b4d528af991d358409050c44ebefd0dc, type: 2}
@@ -384,7 +381,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: e9b90d2e67f6dc443ba19bc1e8e9da2c, type: 2}
   - {fileID: 2100000, guid: b4d528af991d358409050c44ebefd0dc, type: 2}
@@ -420,7 +416,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: e9b90d2e67f6dc443ba19bc1e8e9da2c, type: 2}
   - {fileID: 2100000, guid: b4d528af991d358409050c44ebefd0dc, type: 2}
@@ -456,7 +451,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 483110a781f98ce488273b51c976bcdf, type: 2}
   m_StaticBatchInfo:
@@ -491,7 +485,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: e9b90d2e67f6dc443ba19bc1e8e9da2c, type: 2}
   - {fileID: 2100000, guid: b4d528af991d358409050c44ebefd0dc, type: 2}
@@ -726,19 +719,6 @@ MonoBehaviour:
   lastCarPositionZ: 0
   lastSpeed: 0
   deltaSpeed: 0
---- !u!114 &114401152178655534
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1492078187752378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e04038acc18948489b9efed3be6b031, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leftLight: {fileID: 108828150569486470}
-  rightLight: {fileID: 108644508449718570}
 --- !u!114 &114403663330010018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -765,7 +745,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24842a03d8e664d259075a7059dd330c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pathType: 0
-  kmSpeed: 15
+  lightPanel: {fileID: 1492078187752378}
   leftLight: {fileID: 108828150569486470}
   rightLight: {fileID: 108644508449718570}
+  pathType: 0
+  kmSpeed: 15

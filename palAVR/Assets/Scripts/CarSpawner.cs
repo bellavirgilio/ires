@@ -27,12 +27,12 @@ public class CarSpawner : MonoBehaviour {
     {
         int random = Random.Range(1, 3);
 
-        if (totalCars < 8)
+        if (totalCars < 4) // changed to 4 from 8 because there are 2 separate spawners with separate counters
         {
-            if (numFastCars == 4) {
+            if (numFastCars == 2) {
                 random = 1;
             }
-            if (numNormalCars == 4) {
+            if (numNormalCars == 2) {
                 random = 2;
             }
             if (gesture) {
@@ -41,14 +41,16 @@ public class CarSpawner : MonoBehaviour {
                     Instantiate(gestureCar, transform.position, transform.rotation);
                     numNormalCars++;
                     totalCars++;
-                    Debug.Log("Gesture car deployed\nSpeed: Normal\nNumber of cars deployed: " + totalCars + "\nNumber of normal cars: " + numNormalCars);
+                    //Debug.Log("Gesture car deployed\nSpeed: Normal\nNumber of cars deployed: " + totalCars + "\nNumber of normal cars: " + numNormalCars);
+                    Debug.Log("Total cars: " + totalCars);
                 }
                 if (random == 2) // generates a fast gesture car
                 {
                     Instantiate(gestureCar_fast, transform.position, transform.rotation);
                     numFastCars++;
                     totalCars++;
-                    Debug.Log("Gesture car deployed\nSpeed: Fast\nNumber of cars deployed: " + totalCars + "\nNumber of normal cars: " + numFastCars);
+                    Debug.Log("Total cars: " + totalCars);
+                    //Debug.Log("Gesture car deployed\nSpeed: Fast\nNumber of cars deployed: " + totalCars + "\nNumber of normal cars: " + numFastCars);
                 }
             } else {
                 if (random == 1) // generates a normal sensor car
@@ -56,14 +58,16 @@ public class CarSpawner : MonoBehaviour {
                     Instantiate(sensorCar, transform.position, transform.rotation);
                     numNormalCars++;
                     totalCars++;
-                    Debug.Log("Sensor car deployed\nSpeed: Normal\nNumber of cars deployed: " + totalCars + "\nNumber of normal cars: " + numNormalCars);
+                    Debug.Log("Total cars: " + totalCars);
+                    //Debug.Log("Sensor car deployed\nSpeed: Normal\nNumber of cars deployed: " + totalCars + "\nNumber of normal cars: " + numNormalCars);
                 }
                 if (random == 2) // generates a fast sensor car
                 {
                     Instantiate(sensorCar_fast, transform.position, transform.rotation);
                     numFastCars++;
                     totalCars++;
-                    Debug.Log("Sensor car deployed\nSpeed: Fast\nNumber of cars deployed: " + totalCars + "\nNumber of normal cars: " + numFastCars);
+                    Debug.Log("Total cars: " + totalCars);
+                    //Debug.Log("Sensor car deployed\nSpeed: Fast\nNumber of cars deployed: " + totalCars + "\nNumber of normal cars: " + numFastCars);
                 }
             }
         } else {
