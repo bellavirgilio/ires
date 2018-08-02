@@ -8,7 +8,7 @@ using Pose = Thalmic.Myo.Pose;
 using UnlockType = Thalmic.Myo.UnlockType;
 using VibrationType = Thalmic.Myo.VibrationType;
 
-public class PathManager : MonoBehaviour {
+public class GesturePathManager : MonoBehaviour {
 
     // determining the speed of the vehicle
     private float lastX;
