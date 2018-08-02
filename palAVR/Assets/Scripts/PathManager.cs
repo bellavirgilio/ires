@@ -75,7 +75,7 @@ public class PathManager : MonoBehaviour {
         } if (gameObject.tag.Equals("car_south")) {
             stopX = 2f;
             //stopX = pedX + 7f;
-            stopZ = 0.5f;
+            stopZ = 31f;
             //stopZ = pedZ - 7f;
             stop = new Vector3(stopX, 0.5f, stopZ);
         }
@@ -142,28 +142,22 @@ public class PathManager : MonoBehaviour {
         }
 
         if (stopCount == 1) {
-            Tween llYellowWarning = leftLight.DOColor(Color.yellow, 12f);
-            Tween rlYellowWarning = rightLight.DOColor(Color.yellow, 12f);
-            Tween panelYellowWarning = panel.DOColor(Color.yellow, 12f);
+            Tween llYellowWarning = leftLight.DOColor(Color.yellow, 8f);
+            Tween rlYellowWarning = rightLight.DOColor(Color.yellow, 8f);
+            Tween panelYellowWarning = panel.DOColor(Color.yellow, 8f);
 
-            Debug.Log("Stop running.");
+            //Debug.Log("Stop running.");
             sequence1.Kill();
-            Debug.Log("Car should pause and slow down");
+            //Debug.Log("Car should pause and slow down");
             sequence2 = DOTween.Sequence();
             Tween slowdownPath = transform.DOPath(waypoints2, slowdownPathTime, pathType).SetLookAt(0.01f);
             Tween continuePath = transform.DOPath(waypoints3, continuePathTime, pathType).SetLookAt(0.01f);
 
             sequence2.Append(slowdownPath);
-            sequence2.AppendInterval(15f);
-            sequence2.AppendInterval(15f);
-            // checking if DOColor duration means time it takes to turn that color
-            sequence2.Insert(18f + slowdownPathTime, llYellowWarning);
-            sequence2.Insert(18f + slowdownPathTime, rlYellowWarning);
-            sequence2.Insert(18f + slowdownPathTime, panelYellowWarning);
-
-            //sequence2.Append(panelYellowWarning);
-            //sequence2.Insert(2, rlYellowWarning);
-            //sequence2.Insert(2, llYellowWarning);
+            sequence2.AppendInterval(10f);
+            sequence2.Insert(10f + slowdownPathTime, llYellowWarning);
+            sequence2.Insert(10f + slowdownPathTime, rlYellowWarning);
+            sequence2.Insert(10f + slowdownPathTime, panelYellowWarning);
             sequence2.Append(continuePath);
 
             stopCount += 1;

@@ -12,6 +12,7 @@ TagManager:
   - PedCamera
   - ZoneA
   - ZoneB
+  - Destroyer
   layers:
   - Default
   - TransparentFX
