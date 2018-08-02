@@ -14,9 +14,9 @@ public class PathManager : MonoBehaviour {
     public Sequence sequence1;
     public Sequence sequence2;
 
-    private Transform pedestrian; // needs to be SteamVR/[CameraRig], use PedPlaceholder for now
-    private float pedX;
-    private float pedZ;
+    //private Transform pedestrian; // needs to be SteamVR/[CameraRig], use PedPlaceholder for now
+    //private float pedX;
+    //private float pedZ;
     private float stopX;
     private float stopZ;
     private Vector3 stop;

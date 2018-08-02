@@ -15,6 +15,7 @@ public class SensorPathManager : MonoBehaviour
     private float deltaSpeed;
 
     // lights and light panel
+    public GameObject lightPanel;
     private Material panel;
     public Light leftLight;
     public Light rightLight;
@@ -63,10 +64,7 @@ public class SensorPathManager : MonoBehaviour
         lastX = transform.position.x;
         lastZ = transform.position.z;
 
-        // sets panel and lights to red
-        panel = GameObject.Find("LightPanel").GetComponent<Renderer>().material;
-        leftLight = GameObject.Find("LeftLight").GetComponent<Light>();
-        rightLight = GameObject.Find("RightLight").GetComponent<Light>();
+        panel = lightPanel.GetComponent<Renderer>().material;
 
         RedLights();
 
@@ -157,7 +155,7 @@ public class SensorPathManager : MonoBehaviour
         {
             sensorX = this.transform.position.x;
             sensorZ = this.transform.position.z;
-            UnityEngine.Debug.Log("sensorStop: " + "(" + sensorX + ", 0.5, " + sensorZ + ")");
+            // UnityEngine.Debug.Log("sensorStop: " + "(" + sensorX + ", 0.5, " + sensorZ + ")");
             sensorStop = new Vector3(sensorX, 0.5f, sensorZ);
             oneTime = true;
         }
@@ -188,7 +186,7 @@ public class SensorPathManager : MonoBehaviour
             oneTime2 = true;
         }
 
-        if (!sensed && oneTime2 == true && currentSpeed > 0.0f) {
+        if (!sensed && oneTime2 && currentSpeed > 0.0f) {
             RedLights();
         }
     }
@@ -226,9 +224,6 @@ public class SensorPathManager : MonoBehaviour
         sequence2.Insert(10f + slowdownPathTime, rlYellowWarning);
         sequence2.Insert(10f + slowdownPathTime, panelYellowWarning);
         sequence2.Append(continuePath);
-
-        // UnityEngine.Debug.Log("current speed: " + currentSpeed);
-
     }
 
     public void GreenLights()

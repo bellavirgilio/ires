@@ -730,6 +730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6857adf2cc4846de8563b41830ac26f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightPanel: {fileID: 1616746416564426}
   leftLight: {fileID: 108262285188489346}
   rightLight: {fileID: 108514335013743324}
   pathType: 0
