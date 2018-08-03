@@ -131,6 +131,7 @@ public class GesturePathManager : MonoBehaviour {
             {
                 Debug.Log("Stop gesture");
                 gestured = true;
+                slowing = true;
             }
         }
     }
@@ -191,7 +192,7 @@ public class GesturePathManager : MonoBehaviour {
 
         //UnityEngine.Debug.Log("Stop running.");
         sequence1.Kill();
-        slowing = true;
+        //slowing = true;
         //UnityEngine.Debug.Log("Car should pause and slow down");
         sequence2 = DOTween.Sequence();
         Tween slowdownPath = transform.DOPath(slowdownPoints, slowdownPathTime, pathType).SetLookAt(0.01f);

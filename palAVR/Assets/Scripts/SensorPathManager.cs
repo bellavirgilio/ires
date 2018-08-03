@@ -119,6 +119,7 @@ public class SensorPathManager : MonoBehaviour
         if (col.gameObject.tag.Equals("PedCamera"))
         {
             sensed = true;
+            slowing = true;
             senseCount++;
             UnityEngine.Debug.Log("collider entered");
         }
@@ -204,7 +205,7 @@ public class SensorPathManager : MonoBehaviour
 
         //UnityEngine.Debug.Log("Stop running.");
         sequence1.Kill();
-        slowing = true;
+        //slowing = true;
         //UnityEngine.Debug.Log("Car should pause and slow down");
         sequence2 = DOTween.Sequence();
         Tween slowdownPath = transform.DOPath(slowdownPoints, slowdownPathTime, pathType).SetLookAt(0.01f);

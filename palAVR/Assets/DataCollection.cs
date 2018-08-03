@@ -10,6 +10,12 @@ public class DataCollection : MonoBehaviour
     private bool inA;
     private bool inB;
 
+    // pedestrian stopwatch
+    private Stopwatch pedStop;
+    private TimeSpan pedTime;
+    String behavior = "";
+    private String pedLog; // a log of pedestrian behavior
+
     // car info
     public GameObject spawner_north;
     public GameObject spawner_south;
@@ -37,6 +43,7 @@ public class DataCollection : MonoBehaviour
     SensorPathManager sensorPathManager;
     private bool slowing;
 
+    // car stopwatch
     private Stopwatch stopwatch;
     float slowingTime;
     float stoppedTime;
@@ -50,6 +57,7 @@ public class DataCollection : MonoBehaviour
         carSpawnerNorth = spawner_north.GetComponent<CarSpawner>();
         carSpawnerSouth = spawner_south.GetComponent<CarSpawner>();
         increment = totalCars + 1;
+        pedStop = new Stopwatch();
     }
 
     // Update is called once per frame
@@ -130,15 +138,16 @@ public class DataCollection : MonoBehaviour
             }
         }
 
-        // occurs only when the car spawns –– restarting increment to 1 not working
-        if (totalCars == increment) {
-            increment++;
-            UnityEngine.Debug.Log(CarID());
-
+        // only occurs when a new car is spawned
+        if (totalCars == increment)
+        {
             stopwatch = new Stopwatch();
             stopwatch.Start();
-            UnityEngine.Debug.Log("new stopwatch created and started");
+            // UnityEngine.Debug.Log("new stopwatch created and started");
+            doOnce = false;
 
+            UnityEngine.Debug.Log(CarID());
+            increment++;
         }
 
 
@@ -167,7 +176,7 @@ public class DataCollection : MonoBehaviour
             {
                 timespanUntilSlowing = stopwatch.Elapsed;
                 slowing = true;
-                UnityEngine.Debug.Log("slowing is " + slowing);
+                //UnityEngine.Debug.Log("slowing is " + slowing);
             }
         }
 
@@ -180,6 +189,7 @@ public class DataCollection : MonoBehaviour
             UnityEngine.Debug.Log("Time slowing: " + slowingTime);
             UnityEngine.Debug.Log("Time stopped: " + stoppedTime);
             doOnce = true;
+            slowing = false;
         }
 
     }
@@ -190,6 +200,11 @@ public class DataCollection : MonoBehaviour
         if (other.tag == "crossing_a")
         {
             inA = true;
+
+            pedTime = pedStop.Elapsed;
+            behavior = "Entered A at " + pedTime.ToString() + "\n";
+            pedLog += behavior;
+            UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
             // Debug.Log("in A");
         }
         // other side of the street
@@ -197,6 +212,11 @@ public class DataCollection : MonoBehaviour
         {
             inB = true;
             // Debug.Log("in B");
+
+            pedTime = pedStop.Elapsed;
+            pedLog += behavior;
+            behavior = "Entered B at " + pedTime.ToString() + "\n";
+            UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
         }
     }
 
@@ -207,16 +227,27 @@ public class DataCollection : MonoBehaviour
         {
             inA = false;
             // Debug.Log("leaving A");
+
+            pedTime = pedStop.Elapsed;
+            pedLog += behavior;
+            behavior = "Exited A at " + pedTime.ToString() + "\n";
+            UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
         }
         // other side of the street
         if (other.tag == "crossing_b")
         {
             inB = false;
             // Debug.Log("leaving B");
+
+            pedTime = pedStop.Elapsed;
+            pedLog += behavior;
+            behavior = "Exited B at " + pedTime.ToString() + "\n";
+            UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
         }
     }
 
-    public string CarID() {
+    public string CarID()
+    {
         string result = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
         result += "Car number: " + totalCars + "\n";
         result += "Car type: " + carType + "\n";
@@ -224,5 +255,9 @@ public class DataCollection : MonoBehaviour
         result += "Car origin: " + carOrigin + "\n";
 
         return result;
+    }
+
+    public string PedLog() {
+        return pedLog;
     }
 }
