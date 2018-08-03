@@ -44,7 +44,7 @@ public class SensorPathManager : MonoBehaviour
     private float slowdownPathDistance;
     private float continuePathDistance;
     private float nonstopPathDistance;
-    private float slowdownPathTime;
+    public float slowdownPathTime;
     private float continuePathTime;
     private float nonstopPathTime;
 
@@ -58,6 +58,9 @@ public class SensorPathManager : MonoBehaviour
     private int senseCount;
     private bool oneTime;
     private bool oneTime2;
+
+    // car behavior booleans for data collection
+    public bool slowing;
 
     void Start()
     {
@@ -201,6 +204,7 @@ public class SensorPathManager : MonoBehaviour
 
         //UnityEngine.Debug.Log("Stop running.");
         sequence1.Kill();
+        slowing = true;
         //UnityEngine.Debug.Log("Car should pause and slow down");
         sequence2 = DOTween.Sequence();
         Tween slowdownPath = transform.DOPath(slowdownPoints, slowdownPathTime, pathType).SetLookAt(0.01f);
@@ -210,10 +214,10 @@ public class SensorPathManager : MonoBehaviour
         sequence2.Insert(0, lYellow);
         sequence2.Insert(0, rYellow);
         sequence2.Insert(0, pYellow);
-        sequence2.AppendInterval(10f); // changed from 15f
-        sequence2.Insert(10f + slowdownPathTime, llYellowWarning); // changed from 15f
-        sequence2.Insert(10f + slowdownPathTime, rlYellowWarning);
-        sequence2.Insert(10f + slowdownPathTime, panelYellowWarning);
+        sequence2.AppendInterval(12f); // changed from 15f
+        sequence2.Insert(12f, llYellowWarning); // changed from 15f
+        sequence2.Insert(12f, rlYellowWarning);
+        sequence2.Insert(12f, panelYellowWarning);
         sequence2.Append(continuePath);
     }
 

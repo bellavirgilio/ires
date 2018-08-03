@@ -13,6 +13,8 @@ TagManager:
   - ZoneA
   - ZoneB
   - Destroyer
+  - crossing_a
+  - crossing_b
   layers:
   - Default
   - TransparentFX

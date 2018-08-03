@@ -37,7 +37,7 @@ public class DriverPathManager : MonoBehaviour {
     private float slowdownPathDistance;
     private float continuePathDistance;
     private float nonstopPathDistance;
-    private float slowdownPathTime;
+    public float slowdownPathTime;
     private float continuePathTime;
     private float nonstopPathTime;
 
@@ -51,6 +51,9 @@ public class DriverPathManager : MonoBehaviour {
     private int senseCount;
     private bool oneTime;
     private bool oneTime2;
+
+    // car behavior booleans for data collection
+    public bool slowing;
 
     void Start()
     {
@@ -106,7 +109,7 @@ public class DriverPathManager : MonoBehaviour {
         {
             sensed = true;
             senseCount++;
-            UnityEngine.Debug.Log("collider entered");
+            // UnityEngine.Debug.Log("collider entered");
         }
         // UnityEngine.Debug.Log("sensed is " + sensed);
     }
@@ -117,7 +120,7 @@ public class DriverPathManager : MonoBehaviour {
         {
             sensed = false;
 
-            UnityEngine.Debug.Log("collider exited");
+            // UnityEngine.Debug.Log("collider exited");
         }
     }
 
@@ -149,9 +152,12 @@ public class DriverPathManager : MonoBehaviour {
             stop};
 
         // path after the car stops (based on the direction of the car)
-        if (gameObject.tag.Equals("car_north")) {
+        if (gameObject.tag.Equals("car_north"))
+        {
             continuePoints = new[] { stop, new Vector3(-1.760559f, 0.5f, 22.42285f), new Vector3(-1.502464f, 0.5f, -38.09794f), new Vector3(-1.756076f, 0.5f, -41.22349f), new Vector3(-4.163716f, 0.5f, -42.69579f), new Vector3(-7.230853f, 0.5f, -42.92153f), new Vector3(-23.32813f, 0.5f, -42.41516f), new Vector3(-32.60156f, 0.5f, -40.63574f), new Vector3(-36.08203f, 0.5f, -39.28369f), new Vector3(-40.13672f, 0.5f, -37.08124f), new Vector3(-43.65625f, 0.5f, -34.58752f), new Vector3(-47.67969f, 0.5f, -30.06952f), new Vector3(-50.73828f, 0.5f, -25.1709f), new Vector3(-51.85156f, 0.5f, -19.78284f), new Vector3(-53.3808f, 0.5f, -13.21484f), new Vector3(-52.84766f, 0.5f, 85.06738f), new Vector3(-52.45807f, 0.5f, 108.1045f), new Vector3(-50.43028f, 0.5f, 113.5117f), new Vector3(-48.01571f, 0.5f, 118.5967f), new Vector3(-43.88325f, 0.5f, 122.8066f), new Vector3(-39.57445f, 0.5f, 125.626f), new Vector3(-34.32539f, 0.5f, 128.3672f), new Vector3(-24.60913f, 0.5f, 129.6172f) };
-        } if (gameObject.tag.Equals("car_south")) {
+        }
+        if (gameObject.tag.Equals("car_south"))
+        {
             continuePoints = new[] { stop, new Vector3(2f, 0.5f, 65.3f), new Vector3(2f, 0.5f, 123.9922f), new Vector3(1.934553f, 0.5f, 126.453f), new Vector3(2.506611f, 0.5f, 128.8034f), new Vector3(4.788719f, 0.5f, 130.0849f), new Vector3(24.65626f, 0.5f, 130.2603f), new Vector3(34.32539f, 0.5f, 128.3672f), new Vector3(39.57445f, 0.5f, 125.626f), new Vector3(43.88325f, 0.5f, 122.8066f), new Vector3(48.01571f, 0.5f, 118.5967f), new Vector3(50.43028f, 0.5f, 113.5117f), new Vector3(52.45807f, 0.5f, 108.1045f), new Vector3(52.84766f, 0.5f, 85.06738f), new Vector3(53.3808f, 0.5f, -13.21484f), new Vector3(51.85156f, 0.5f, -19.78284f), new Vector3(50.73828f, 0.5f, -25.1709f), new Vector3(47.67969f, 0.5f, -30.06952f), new Vector3(43.65625f, 0.5f, -34.58752f), new Vector3(40.13672f, 0.5f, -37.08124f), new Vector3(36.08203f, 0.5f, -39.28369f), new Vector3(32.60156f, 0.5f, -40.63574f), new Vector3(23.32813f, 0.5f, -42.41516f) };
         }
 
@@ -170,17 +176,23 @@ public class DriverPathManager : MonoBehaviour {
         return Mathf.Sqrt(deltaX * deltaX + deltaZ * deltaZ);
     }
 
+
+    //TODO remove slowing + stopped variables... only use slowing
+    // datacollection needs to access slowdownpathtime
+
     public void PathFind()
     {
         //UnityEngine.Debug.Log("Stop running.");
         sequence1.Kill();
-        //UnityEngine.Debug.Log("Car should pause and slow down");
+        slowing = true;
+        // UnityEngine.Debug.Log("slowing is " + slowing);
+        // UnityEngine.Debug.Log("Car should pause and slow down");
         sequence2 = DOTween.Sequence();
         Tween slowdownPath = transform.DOPath(slowdownPoints, slowdownPathTime, pathType).SetLookAt(0.01f);
         Tween continuePath = transform.DOPath(continuePoints, continuePathTime, pathType).SetLookAt(0.01f);
 
         sequence2.Append(slowdownPath);
-        sequence2.AppendInterval(10f + slowdownPathTime); // changed from 15f
+        sequence2.AppendInterval(12f); // changed from 10f + slowdownPathTime
         sequence2.Append(continuePath);
     }
 }

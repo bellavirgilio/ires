@@ -46,7 +46,7 @@ public class SensorPathManagerTest : MonoBehaviour
     private float slowdownPathDistance;
     private float continuePathDistance;
     private float nonstopPathDistance;
-    private float slowdownPathTime;
+    public float slowdownPathTime;
     private float continuePathTime;
     private float nonstopPathTime;
 

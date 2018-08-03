@@ -47,7 +47,7 @@ public class GesturePathManager : MonoBehaviour {
     private float slowdownPathDistance;
     private float continuePathDistance;
     private float nonstopPathDistance;
-    private float slowdownPathTime;
+    public float slowdownPathTime;
     private float continuePathTime;
     private float nonstopPathTime;
 
@@ -65,6 +65,9 @@ public class GesturePathManager : MonoBehaviour {
     private int gestureCount;
     private bool oneTime;
     private bool oneTime2;
+
+    // car behavior booleans for data collection
+    public bool slowing;
 
     void Start()
     {
@@ -179,15 +182,16 @@ public class GesturePathManager : MonoBehaviour {
     }
 
     public void PathFind() {
-        Tween llYellowWarning = leftLight.DOColor(Color.yellow, 8f);
-        Tween rlYellowWarning = rightLight.DOColor(Color.yellow, 8f);
-        Tween panelYellowWarning = panel.DOColor(Color.yellow, 8f);
+        Tween llYellowWarning = leftLight.DOColor(Color.yellow, 4f);
+        Tween rlYellowWarning = rightLight.DOColor(Color.yellow, 4f);
+        Tween panelYellowWarning = panel.DOColor(Color.yellow, 4f);
         Tween lYellow = leftLight.DOColor(Color.yellow, slowdownPathTime);
         Tween rYellow = rightLight.DOColor(Color.yellow, slowdownPathTime);
         Tween pYellow = panel.DOColor(Color.yellow, slowdownPathTime);
 
         //UnityEngine.Debug.Log("Stop running.");
         sequence1.Kill();
+        slowing = true;
         //UnityEngine.Debug.Log("Car should pause and slow down");
         sequence2 = DOTween.Sequence();
         Tween slowdownPath = transform.DOPath(slowdownPoints, slowdownPathTime, pathType).SetLookAt(0.01f);
@@ -197,10 +201,10 @@ public class GesturePathManager : MonoBehaviour {
         sequence2.Insert(0, lYellow);
         sequence2.Insert(0, rYellow);
         sequence2.Insert(0, pYellow);
-        sequence2.AppendInterval(10f); // changed from 15f
-        sequence2.Insert(10f + slowdownPathTime, llYellowWarning); // changed from 15f
-        sequence2.Insert(10f + slowdownPathTime, rlYellowWarning);
-        sequence2.Insert(10f + slowdownPathTime, panelYellowWarning);
+        sequence2.AppendInterval(12f); // changed from 15f
+        sequence2.Insert(8f + slowdownPathTime, llYellowWarning); // changed from 15f
+        sequence2.Insert(8f + slowdownPathTime, rlYellowWarning);
+        sequence2.Insert(8f + slowdownPathTime, panelYellowWarning);
         sequence2.Append(continuePath);
     }
 
