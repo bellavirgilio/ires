@@ -17,7 +17,7 @@ namespace Valve.VR.InteractionSystem
 		//-------------------------------------------------
 		void OnCollisionEnter( Collision other )
 		{
-			Balloon contactBalloon = other.collider.GetComponentInParent<Balloon>();
+			Balloon contactBalloon = this.GetComponent<Collider>().GetComponentInParent<Balloon>();
 			if ( contactBalloon != null )
 			{
 				Hand hand = physParent.GetComponentInParent<Hand>();

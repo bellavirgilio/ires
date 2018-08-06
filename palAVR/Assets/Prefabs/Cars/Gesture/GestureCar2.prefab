@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 33766262037893006}
   - component: {fileID: 23025502080353382}
   - component: {fileID: 64723500599088592}
+  - component: {fileID: 114124202108805308}
   m_Layer: 0
   m_Name: FamilyCarChassis
   m_TagString: Untagged
@@ -674,6 +675,18 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &114124202108805308
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1893299891099522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f8c3744951ce43f6afaed0fc04f7634, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionDetected: 0
 --- !u!114 &114237296515655004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -750,3 +763,5 @@ MonoBehaviour:
   rightLight: {fileID: 108644508449718570}
   pathType: 0
   kmSpeed: 15
+  slowdownPathTime: 0
+  slowing: 0

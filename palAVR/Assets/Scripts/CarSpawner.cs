@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CarSpawner : MonoBehaviour {
-
-
-    // needs to access stopped and slowing variables from driver path manager
-
+    
     public bool gesture;
     public bool sensor;
     public bool driver;
@@ -43,6 +40,7 @@ public class CarSpawner : MonoBehaviour {
     public void SpawnObject()
     {
         int random = Random.Range(0, 2);
+        Debug.Log("random: " + random);
 
         origin = this.name;
 
@@ -50,9 +48,9 @@ public class CarSpawner : MonoBehaviour {
         {
             // evens out distribution of normal/fast cars
             if (numFastCars == 2) {
-                random = 1;
+                random = 0;
             } if (numNormalCars == 2) {
-                random = 2;
+                random = 1;
             }
 
             // increments count of normal cars and fast cars

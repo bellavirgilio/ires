@@ -105,8 +105,10 @@ namespace Valve.VR.InteractionSystem
 			{
 				Rigidbody rb = GetComponent<Rigidbody>();
 				float rbSpeed = rb.velocity.sqrMagnitude;
-				bool canStick = ( targetPhysMaterial != null && collision.collider.sharedMaterial == targetPhysMaterial && rbSpeed > 0.2f );
-				bool hitBalloon = collision.collider.gameObject.GetComponent<Balloon>() != null;
+                bool canStick = ( targetPhysMaterial != null && this.GetComponent<Collider>().sharedMaterial == targetPhysMaterial && rbSpeed > 0.2f );
+				bool hitBalloon = this.GetComponent<Collider>().gameObject.GetComponent<Balloon>() != null;
+
+                // changed collision.getcomponent<collider> to this.getcomponent
 
 				if ( travelledFrames < 2 && !canStick )
 				{
@@ -114,6 +116,7 @@ namespace Valve.VR.InteractionSystem
 					transform.position = prevPosition - prevVelocity * Time.deltaTime;
 					transform.rotation = prevRotation;
 
+                    //Vector3 reflfectDir = Vector3.Reflect(arrowHeadRB.velocity, Vector3.zero);
 					Vector3 reflfectDir = Vector3.Reflect( arrowHeadRB.velocity, collision.contacts[0].normal );
 					arrowHeadRB.velocity = reflfectDir * 0.25f;
 					shaftRB.velocity = reflfectDir * 0.25f;
@@ -134,13 +137,13 @@ namespace Valve.VR.InteractionSystem
 				}
 
 				FireSource arrowFire = gameObject.GetComponentInChildren<FireSource>();
-				FireSource fireSourceOnTarget = collision.collider.GetComponentInParent<FireSource>();
+				FireSource fireSourceOnTarget = this.GetComponent<Collider>().GetComponentInParent<FireSource>();
 
 				if ( arrowFire != null && arrowFire.isBurning && ( fireSourceOnTarget != null ) )
 				{
 					if ( !hasSpreadFire )
 					{
-						collision.collider.gameObject.SendMessageUpwards( "FireExposure", gameObject, SendMessageOptions.DontRequireReceiver );
+						this.GetComponent<Collider>().gameObject.SendMessageUpwards( "FireExposure", gameObject, SendMessageOptions.DontRequireReceiver );
 						hasSpreadFire = true;
 					}
 				}
@@ -150,7 +153,7 @@ namespace Valve.VR.InteractionSystem
 					// always pop balloons
 					if ( rbSpeed > 0.1f || hitBalloon )
 					{
-						collision.collider.gameObject.SendMessageUpwards( "ApplyDamage", SendMessageOptions.DontRequireReceiver );
+						this.GetComponent<Collider>().gameObject.SendMessageUpwards( "ApplyDamage", SendMessageOptions.DontRequireReceiver );
 						gameObject.SendMessage( "HasAppliedDamage", SendMessageOptions.DontRequireReceiver );
 					}
 				}
@@ -161,8 +164,8 @@ namespace Valve.VR.InteractionSystem
 					transform.position = prevPosition;
 					transform.rotation = prevRotation;
 					arrowHeadRB.velocity = prevVelocity;
-					Physics.IgnoreCollision( arrowHeadRB.GetComponent<Collider>(), collision.collider );
-					Physics.IgnoreCollision( shaftRB.GetComponent<Collider>(), collision.collider );
+					Physics.IgnoreCollision( arrowHeadRB.GetComponent<Collider>(), this.GetComponent<Collider>() );
+					Physics.IgnoreCollision( shaftRB.GetComponent<Collider>(), this.GetComponent<Collider>() );
 				}
 
 				if ( canStick )
@@ -171,7 +174,7 @@ namespace Valve.VR.InteractionSystem
 				}
 
 				// Player Collision Check (self hit)
-				if ( Player.instance && collision.collider == Player.instance.headCollider )
+				if ( Player.instance && this.GetComponent<Collider>() == Player.instance.headCollider )
 				{
 					Player.instance.PlayerShotSelf();
 				}
@@ -194,7 +197,7 @@ namespace Valve.VR.InteractionSystem
 				{
 					RaycastHit hit = hitInfo[i];
 
-					if ( hit.collider == collision.collider )
+					if ( hit.collider == this.GetComponent<Collider>() )
 					{
 						properHit = true;
 						break;
@@ -229,10 +232,10 @@ namespace Valve.VR.InteractionSystem
 			// If the hit item has a parent, dock an empty object to that
 			// this fixes an issue with scaling hierarchy. I suspect this is not sustainable for a large object / scaling hierarchy.
 			scaleParentObject = new GameObject( "Arrow Scale Parent" );
-			Transform parentTransform = collision.collider.transform;
+			Transform parentTransform = this.GetComponent<Collider>().transform;
 
 			// Don't do this for weebles because of how it has a fixed joint
-			ExplosionWobble wobble = collision.collider.gameObject.GetComponent<ExplosionWobble>();
+			ExplosionWobble wobble = this.GetComponent<Collider>().gameObject.GetComponent<ExplosionWobble>(); 
 			if ( !wobble )
 			{
 				if ( parentTransform.parent )
@@ -247,6 +250,8 @@ namespace Valve.VR.InteractionSystem
 			transform.parent = scaleParentObject.transform;
 			transform.rotation = prevRotation;
 			transform.position = prevPosition;
+            //transform.position = Vector3.zero - transform.forward * ( 0.75f - ( Util.RemapNumberClamped( prevVelocity.magnitude, 0f, 10f, 0.0f, 0.1f ) + Random.Range( 0.0f, 0.05f ) ) );
+
 			transform.position = collision.contacts[0].point - transform.forward * ( 0.75f - ( Util.RemapNumberClamped( prevVelocity.magnitude, 0f, 10f, 0.0f, 0.1f ) + Random.Range( 0.0f, 0.05f ) ) );
 		}
 

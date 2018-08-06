@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 33475390761407796}
   - component: {fileID: 23682810163026274}
   - component: {fileID: 64233466208389186}
+  - component: {fileID: 114909337217596934}
   m_Layer: 0
   m_Name: FamilyCarChassis
   m_TagString: Untagged
@@ -438,7 +439,7 @@ MeshCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1361811065049176}
   m_Material: {fileID: 13400000, guid: 4e2a18fdb7d20fa40bafb75ae73783d7, type: 2}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 3
   m_Convex: 1
@@ -530,3 +531,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pathType: 0
   kmSpeed: 15
+  slowdownPathTime: 0
+  slowing: 0
+--- !u!114 &114909337217596934
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1361811065049176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f8c3744951ce43f6afaed0fc04f7634, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionDetected: 0

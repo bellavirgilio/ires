@@ -7,14 +7,13 @@ using System;
 public class DataCollection : MonoBehaviour
 {
 
-    private bool inA;
-    private bool inB;
-
     // pedestrian stopwatch
     private Stopwatch pedStop;
     private TimeSpan pedTime;
     String behavior = "";
     private String pedLog; // a log of pedestrian behavior
+    CarCollisionDetection carCollisionDetection;
+    private bool pedestrianCollision;
 
     // car info
     public GameObject spawner_north;
@@ -28,7 +27,7 @@ public class DataCollection : MonoBehaviour
     int numFastCarsSouth;
     int numNormalCarsSouth;
 
-    int totalCars;
+    public int totalCars;
     int increment;
     int totalFastCars;
     int totalNormalCars;
@@ -139,6 +138,8 @@ public class DataCollection : MonoBehaviour
             }
         }
 
+
+
         // only occurs when a new car is spawned
         if (totalCars == increment)
         {
@@ -147,10 +148,10 @@ public class DataCollection : MonoBehaviour
             // UnityEngine.Debug.Log("new stopwatch created and started");
             doOnce = false;
 
-            UnityEngine.Debug.Log(CarID());
+            pedLog += CarID();
+            // UnityEngine.Debug.Log(CarID());
             increment++;
         }
-
 
         if (carType.Equals("gesture"))
         {
@@ -186,11 +187,26 @@ public class DataCollection : MonoBehaviour
         if (slowing && !doOnce)
         {
             timeUntilSlowing = timespanUntilSlowing.ToString();
-            UnityEngine.Debug.Log("Time before slowing: " + timeUntilSlowing);
-            UnityEngine.Debug.Log("Time slowing: " + slowingTime);
-            UnityEngine.Debug.Log("Time stopped: " + stoppedTime);
+            pedLog += "Time before slowing: " + timeUntilSlowing + "\n";
+            pedLog += "Time slowing: " + slowingTime + "\n";
+            pedLog += "Time stopped: " + stoppedTime + "\n";
+            //UnityEngine.Debug.Log("Time before slowing: " + timeUntilSlowing);
+            //UnityEngine.Debug.Log("Time slowing: " + slowingTime);
+            //UnityEngine.Debug.Log("Time stopped: " + stoppedTime);
             doOnce = true;
             slowing = false;
+        }
+
+        carCollisionDetection = car.GetComponentInChildren<CarCollisionDetection>() as CarCollisionDetection;
+        if (carCollisionDetection.collisionDetected) {
+            pedestrianCollision = true;
+        }
+
+        if (pedestrianCollision) {
+            TimeSpan collisionTime = pedStop.Elapsed;
+            pedLog += "pedestrian and car collided at " + collisionTime.ToString() + "\n";
+            //UnityEngine.Debug.Log("pedestrian and car collided at " + collisionTime.ToString());
+            pedestrianCollision = false;
         }
 
     }
@@ -200,24 +216,21 @@ public class DataCollection : MonoBehaviour
         // where the pedestrian starts
         if (other.tag == "crossing_a")
         {
-            inA = true;
-
             pedTime = pedStop.Elapsed;
             behavior = "Entered A at " + pedTime.ToString() + "\n";
             pedLog += behavior;
-            UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
+            //UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
             // Debug.Log("in A");
         }
         // other side of the street
         if (other.tag == "crossing_b")
         {
-            inB = true;
             // Debug.Log("in B");
 
             pedTime = pedStop.Elapsed;
             pedLog += behavior;
             behavior = "Entered B at " + pedTime.ToString() + "\n";
-            UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
+            // UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
         }
     }
 
@@ -226,24 +239,22 @@ public class DataCollection : MonoBehaviour
         // where the pedestrian starts
         if (other.tag == "crossing_a")
         {
-            inA = false;
             // Debug.Log("leaving A");
 
             pedTime = pedStop.Elapsed;
             pedLog += behavior;
             behavior = "Exited A at " + pedTime.ToString() + "\n";
-            UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
+            // UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
         }
         // other side of the street
         if (other.tag == "crossing_b")
         {
-            inB = false;
             // Debug.Log("leaving B");
 
             pedTime = pedStop.Elapsed;
             pedLog += behavior;
             behavior = "Exited B at " + pedTime.ToString() + "\n";
-            UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
+            // UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
         }
     }
 

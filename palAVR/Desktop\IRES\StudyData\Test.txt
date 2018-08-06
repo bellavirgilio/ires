@@ -1,0 +1,75 @@
+Entered A at 00:00:00.0281980
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Car number: 1
+Car type: driver
+Car speed: fast
+Car origin: north
+Entered A at 00:00:00.0281980
+Exited A at 00:00:07.9385170
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Car number: 2
+Car type: driver
+Car speed: fast
+Car origin: south
+Time before slowing: 00:00:06.7600970
+Time slowing: 5.4
+Time stopped: 15.4
+Entered B at 00:00:09.4384700
+Entered A at 00:01:03.5346050
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Car number: 3
+Car type: driver
+Car speed: normal
+Car origin: north
+Time before slowing: 00:00:34.9802980
+Time slowing: 7.199999
+Time stopped: 17.2
+Entered A at 00:01:03.5346050
+Exited A at 00:01:44.6588230
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Car number: 4
+Car type: driver
+Car speed: normal
+Car origin: south
+Time before slowing: 00:00:44.9794410
+Time slowing: 7.199999
+Time stopped: 17.2
+Entered B at 00:01:46.1748400
+Entered A at 00:02:14.9747420
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Car number: 5
+Car type: driver
+Car speed: normal
+Car origin: north
+Entered A at 00:02:14.9747420
+Exited A at 00:02:48.6552090
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Car number: 6
+Car type: driver
+Car speed: normal
+Car origin: south
+Time before slowing: 00:00:09.5514770
+Time slowing: 7.199999
+Time stopped: 17.2
+Entered B at 00:02:50.1509690
+Entered A at 00:03:57.4150650
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Car number: 7
+Car type: driver
+Car speed: normal
+Car origin: north
+Time before slowing: 00:00:34.9631870
+Time slowing: 5.4
+Time stopped: 15.4
+Entered A at 00:03:57.4150650
+Exited A at 00:04:14.2749760
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Car number: 8
+Car type: driver
+Car speed: fast
+Car origin: south
+Time before slowing: 00:00:44.9888030
+Time slowing: 5.4
+Time stopped: 15.4
+Entered B at 00:04:15.7753330
+Entered A at 00:04:54.1350620

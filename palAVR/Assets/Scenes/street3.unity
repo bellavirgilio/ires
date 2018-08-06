@@ -229,7 +229,7 @@ MonoBehaviour:
   driverCar_fast: {fileID: 1842499525287038, guid: beb196b6373b34ff288c95804906c5b6,
     type: 2}
   spawnTime: 0
-  spawnDelay: 80
+  spawnDelay: 60
   totalCars: 0
   numFastCars: 0
   numNormalCars: 0
@@ -1527,7 +1527,7 @@ MonoBehaviour:
   driverCar_fast: {fileID: 1834839767931744, guid: 8dea8756669e64a078534bbb66f47f05,
     type: 2}
   spawnTime: 45
-  spawnDelay: 80
+  spawnDelay: 60
   totalCars: 0
   numFastCars: 0
   numNormalCars: 0
@@ -8115,6 +8115,7 @@ GameObject:
   - component: {fileID: 710935284}
   - component: {fileID: 710935285}
   - component: {fileID: 710935286}
+  - component: {fileID: 710935287}
   m_Layer: 0
   m_Name: VRSimulatorCameraRig
   m_TagString: PedCamera
@@ -8215,6 +8216,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawner_north: {fileID: 5656287}
   spawner_south: {fileID: 136917664}
+  totalCars: 0
+--- !u!114 &710935287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 710935282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd97ff63ae6c9453cb95cd01852192c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataCollection: {fileID: 0}
+  log: 
 --- !u!1001 &711437293
 Prefab:
   m_ObjectHideFlags: 0
@@ -9341,69 +9356,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 801279095}
   m_Mesh: {fileID: 4300008, guid: e99803b507045754b820e9d17ba7f3aa, type: 3}
---- !u!1001 &803976374
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4708693836766724, guid: eb3e63709dcb24aeea9f62a4e7043b0e, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -24
-      objectReference: {fileID: 0}
-    - target: {fileID: 4708693836766724, guid: eb3e63709dcb24aeea9f62a4e7043b0e, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4708693836766724, guid: eb3e63709dcb24aeea9f62a4e7043b0e, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 129.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 4708693836766724, guid: eb3e63709dcb24aeea9f62a4e7043b0e, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4708693836766724, guid: eb3e63709dcb24aeea9f62a4e7043b0e, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 4708693836766724, guid: eb3e63709dcb24aeea9f62a4e7043b0e, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4708693836766724, guid: eb3e63709dcb24aeea9f62a4e7043b0e, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 4708693836766724, guid: eb3e63709dcb24aeea9f62a4e7043b0e, type: 2}
-      propertyPath: m_RootOrder
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 64233466208389186, guid: eb3e63709dcb24aeea9f62a4e7043b0e,
-        type: 2}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: eb3e63709dcb24aeea9f62a4e7043b0e, type: 2}
-  m_IsPrefabParent: 0
---- !u!1 &803976375 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1361811065049176, guid: eb3e63709dcb24aeea9f62a4e7043b0e,
-    type: 2}
-  m_PrefabInternal: {fileID: 803976374}
---- !u!114 &803976376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 803976375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb49b746806f346fcae105fdb3d0774f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &814431202
 GameObject:
   m_ObjectHideFlags: 0
@@ -11593,6 +11545,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawner_north: {fileID: 5656287}
   spawner_south: {fileID: 136917664}
+  totalCars: 0
 --- !u!1 &1017546022
 GameObject:
   m_ObjectHideFlags: 0

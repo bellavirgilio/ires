@@ -2,27 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Collision : MonoBehaviour {
+public class CarCollisionDetection : MonoBehaviour {
 
-	bool collision;
+	public bool collisionDetected;
 
 	public void OnTriggerEnter(Collider other)
     {
         // where the pedestrian starts
 		if (other.tag.Equals("PedCamera"))
         {
-			collision = true;
-			Debug.Log("Pedestrian collided with car");
+			collisionDetected = true;
+			//Debug.Log("Pedestrian collided with car");
 		}
 	}
-    
+
 	public void OnTriggerExit(Collider other)
 	{
 		// where the pedestrian starts
         if (other.tag.Equals("PedCamera"))
         {
-            collision = false;
-			Debug.Log("Pedestrian and car no longer in contact");
+            collisionDetected = false;
+			//Debug.Log("Pedestrian and car no longer in contact");
         }
 	}
 
