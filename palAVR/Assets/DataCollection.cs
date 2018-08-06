@@ -58,6 +58,7 @@ public class DataCollection : MonoBehaviour
         carSpawnerSouth = spawner_south.GetComponent<CarSpawner>();
         increment = totalCars + 1;
         pedStop = new Stopwatch();
+        pedStop.Start();
     }
 
     // Update is called once per frame
