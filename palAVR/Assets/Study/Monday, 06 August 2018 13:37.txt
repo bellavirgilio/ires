@@ -1,0 +1,19 @@
+Entered A at 00:00:00.0306570
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Car number: 1
+Car type: driver
+Car speed: fast
+Car origin: north
+Time before slowing: 00:00:08.6361670
+Time slowing: 5.4
+Time stopped: 15.4
+Entered A at 00:00:00.0306570
+Exited A at 00:00:14.5398700
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Car number: 2
+Car type: driver
+Car speed: fast
+Car origin: south
+Time before slowing: 00:00:45.6309200
+Time slowing: 5.4
+Time stopped: 15.4

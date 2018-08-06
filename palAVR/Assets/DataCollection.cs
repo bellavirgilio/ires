@@ -7,6 +7,10 @@ using System;
 public class DataCollection : MonoBehaviour
 {
 
+    // experiment stopwatch
+    private Stopwatch experimentStop = new Stopwatch();
+    private TimeSpan experimentTime = new TimeSpan();
+
     // pedestrian stopwatch
     private Stopwatch pedStop;
     private TimeSpan pedTime;
@@ -58,11 +62,18 @@ public class DataCollection : MonoBehaviour
         increment = totalCars + 1;
         pedStop = new Stopwatch();
         pedStop.Start();
+        experimentStop.Start();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (totalCars == 8) {
+            experimentTime = experimentStop.Elapsed;
+            pedLog += "Experiment total time: " + experimentTime.ToString() + "\n";
+            totalCars++;
+        }
+
         totalCarsNorth = carSpawnerNorth.totalCars;
         numFastCarsNorth = carSpawnerNorth.numFastCars;
         numNormalCarsNorth = carSpawnerNorth.numNormalCars;

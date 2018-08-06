@@ -1,35 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class DataFileWriter : MonoBehaviour {
+public class DataFileWriter : MonoBehaviour
+{
 
     public DataCollection dataCollection;
     public string log;
+    public string fileName;
+    public string filePath;
+
 
     void Start()
     {
         dataCollection = GameObject.FindWithTag("PedCamera").GetComponent<DataCollection>() as DataCollection;
+        fileName = string.Format("{0}", DateTime.Now.ToString("f"));
+        filePath = Application.dataPath;
     }
-
-    //static void Main()
-    //{
-    //    // Write one string to a text file.
-    //    string text = "A class is the most powerful data type in C#. Like a structure, " +
-    //                   "a class defines the data and behavior of the data type. ";
-    //    // WriteAllText creates a file, writes the specified string to the file,
-    //    // and then closes the file.    You do NOT need to call Flush() or Close().
-    //   System.IO.File.WriteAllText(@"C:\Users\Public\TestFolder\WriteText.txt", text);
-    //}
 
     void Update()
     {
-        if (dataCollection.totalCars == 8) {
+        int totalCars = dataCollection.totalCars;
+
+        if (dataCollection.totalCars == 8)
+        {
             log = dataCollection.PedLog();
-
-            System.IO.File.WriteAllText(@"Desktop\IRES\StudyData\Test.txt", log);
-
-            Debug.Log(log);
+#if UNITY_EDITOR_OSX
+            System.IO.File.WriteAllText(@"" + filePath + "/Study/" + fileName + ".txt", log);
+#elif UNITY_STANDALONE_WIN || UNITY_EDITOR
+            File.WriteAllText("C:/Study/")
+#endif
+            //Debug.Log(log);
+            totalCars++;
         }
     }
 

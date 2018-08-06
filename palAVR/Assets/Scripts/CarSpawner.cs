@@ -40,7 +40,7 @@ public class CarSpawner : MonoBehaviour {
     public void SpawnObject()
     {
         int random = Random.Range(0, 2);
-        Debug.Log("random: " + random);
+        // Debug.Log("random: " + random);
 
         origin = this.name;
 
