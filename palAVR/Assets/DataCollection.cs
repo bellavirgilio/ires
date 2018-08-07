@@ -57,6 +57,8 @@ public class DataCollection : MonoBehaviour
 
     DataFileWriter fileWriter;
     bool hasLogged = false;
+
+    bool startSpawning = false;
     // Use this for initialization
     void Start()
     {
@@ -68,8 +70,39 @@ public class DataCollection : MonoBehaviour
         experimentStop.Start();
 
         fileWriter = GetComponent<DataFileWriter> ();
-    }
 
+
+        StartCoroutine(Experiment);
+    }
+    private IEnumerator Experiment()
+    {
+        while (!Input.GetKeyDown(KeyCode.Space) )
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+   
+        yield return StartCoroutine(MeanCrossingCalculation);
+
+   
+
+    }
+    private IEnumerator MeanCrossingCalculation()
+    {
+        //code to have user walk over the street 
+
+        float totalTime = 0f;
+        float averageTime;
+
+        for (int crossCounter = 0; croussCounter < 4; crossCounter++) {
+
+        }
+
+        averageTime = totalTime / 4;
+
+        startSpawning = true;
+
+        yield return WaitForEndOfFrame();
     // Update is called once per frame
     void Update()
     {
