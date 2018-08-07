@@ -34,9 +34,15 @@ public class CarSpawner : MonoBehaviour {
 
     private void Start()
     {
-        InvokeRepeating("SpawnObject", spawnTime, spawnDelay);
+        
     }
+    //Now called from data collection after the average crossing time calc is done
+    public void StartSpawningCars()
+    {
 
+        InvokeRepeating("SpawnObject", spawnTime, spawnDelay);
+
+    }
     public void SpawnObject()
     {
         int random = Random.Range(0, 2);
