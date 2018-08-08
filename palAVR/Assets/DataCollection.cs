@@ -4,6 +4,11 @@ using UnityEngine;
 using System.Diagnostics;
 using System;
 
+using LockingPolicy = Thalmic.Myo.LockingPolicy;
+using Pose = Thalmic.Myo.Pose;
+using UnlockType = Thalmic.Myo.UnlockType;
+using VibrationType = Thalmic.Myo.VibrationType;
+
 
 public class DataCollection : MonoBehaviour
 {
@@ -24,6 +29,7 @@ public class DataCollection : MonoBehaviour
     // car info
     public GameObject spawner_north;
     public GameObject spawner_south;
+    public GameObject destroyer;
     CarSpawner carSpawnerNorth;
     int totalCarsNorth;
     int numFastCarsNorth;
@@ -46,6 +52,7 @@ public class DataCollection : MonoBehaviour
     DriverPathManager driverPathManager;
     GesturePathManager gesturePathManager;
     SensorPathManager sensorPathManager;
+    CarDestroy carDestroy;
     private bool slowing;
 
     // car stopwatch
@@ -56,6 +63,11 @@ public class DataCollection : MonoBehaviour
     String timeUntilSlowing;
     bool doOnce;
 
+    // myo
+    private GameObject myo;
+    private Pose _lastPose = Pose.Unknown;
+    private bool gestured;
+
     DataFileWriter fileWriter;
     bool hasLogged = false;
 
@@ -63,8 +75,11 @@ public class DataCollection : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        myo = GameObject.Find("Myo");
+
         carSpawnerNorth = spawner_north.GetComponent<CarSpawner>();
         carSpawnerSouth = spawner_south.GetComponent<CarSpawner>();
+        carDestroy = destroyer.GetComponent<CarDestroy>();
         increment = totalCars + 1;
         pedStop = new Stopwatch();
         pedStop.Start();
@@ -102,19 +117,23 @@ public class DataCollection : MonoBehaviour
         float totalTime = 0f;
         float averageTime;
 
-        for (int crossCounter = 0; crossCounter < 4; crossCounter++)
+        for (int crossCounter = 0; crossCounter < 2; crossCounter++) // press space when they're back at the origin
         {
             while (!Input.GetKey(KeyCode.Space))
             {
                 //code to have user walk over the street  4x
                 //Space bar buffer
-
-                UnityEngine.Debug.Log(crossCounter.ToString());
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(.5f);
             }
+
             UnityEngine.Debug.Log(crossCounter.ToString());
+            pedLog += "Space bar occurred at " + pedStop.Elapsed.ToString() + "\n";
+
             yield return new WaitForSeconds(.5f);
+            UnityEngine.Debug.Log("Finished one crossing");
         }
+
+        UnityEngine.Debug.Log("Initial crossing logging complete");
 
         averageTime = totalTime / 4;
         //Todo: Log the naverager time in the logfile 
@@ -131,7 +150,14 @@ public class DataCollection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-            if (totalCars == 8 && !hasLogged)
+        GestureCheck();
+        if (gestured)
+        {
+            pedLog += "Stop gesture occurred at " + pedStop.Elapsed.ToString() + "\n";
+            gestured = false;
+        }
+
+        if (carDestroy.destroyCount == 4 && !hasLogged)
             {
                 experimentTime = experimentStop.Elapsed;
                 //    pedLog += "Experiment total time: " + experimentTime.ToString() + "\n";
@@ -311,7 +337,7 @@ public class DataCollection : MonoBehaviour
             behavior = "Entered A at " + pedTime.ToString() + "\n";
             pedLog += behavior;
             //UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
-            // Debug.Log("in A");
+            UnityEngine.Debug.Log("in A");
         }
         // other side of the street
         if (other.tag == "crossing_b")
@@ -322,6 +348,7 @@ public class DataCollection : MonoBehaviour
             pedLog += behavior;
             behavior = "Entered B at " + pedTime.ToString() + "\n";
             // UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
+            UnityEngine.Debug.Log("in B");
         }
     }
 
@@ -348,6 +375,23 @@ public void OnTriggerExit(Collider other)
         // UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
     }
 }
+
+    void GestureCheck()
+    {
+        ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo>();
+
+        if (thalmicMyo.pose != _lastPose)
+        {
+            _lastPose = thalmicMyo.pose;
+
+            if (thalmicMyo.pose == Pose.FingersSpread)
+            {
+                UnityEngine.Debug.Log("Stop gesture");
+                
+                gestured = true;
+            }
+        }
+    }
 
     public string CarID()
     {

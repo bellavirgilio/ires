@@ -50,7 +50,7 @@ public class CarSpawner : MonoBehaviour {
 
         origin = this.name;
 
-        if (totalCars <= 4) // changed to 4 from 8 because there are 2 separate spawners with separate counters
+        if (totalCars < 4) // changed to 4 from 8 because there are 2 separate spawners with separate counters
         {
             // evens out distribution of normal/fast cars
             if (numFastCars == 2) {
