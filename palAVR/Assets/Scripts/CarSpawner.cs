@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class CarSpawner : MonoBehaviour {
@@ -33,8 +34,19 @@ public class CarSpawner : MonoBehaviour {
     public GameObject instantiatedCar;
 
     private void Start()
+   {
+        StartCoroutine ("WaitForPausePress");
+    }
+
+    IEnumerator WaitForPausePress ()
     {
-        
+
+while (!Input.GetKeyDown(KeyCode.P))
+        {
+            yield return new WaitForSeconds (1 / 60);
+        }
+
+        EditorApplication.isPaused = true;
     }
     //Now called from data collection after the average crossing time calc is done
     public void StartSpawningCars()
