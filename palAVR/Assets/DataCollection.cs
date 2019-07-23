@@ -1,13 +1,12 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
 using System;
 
-using LockingPolicy = Thalmic.Myo.LockingPolicy;
 using Pose = Thalmic.Myo.Pose;
-using UnlockType = Thalmic.Myo.UnlockType;
-using VibrationType = Thalmic.Myo.VibrationType;
+
+//Ensure a DataFileWriter is attached
+[RequireComponent (typeof (DataFileWriter))]
 
 
 public class DataCollection : MonoBehaviour
@@ -15,8 +14,8 @@ public class DataCollection : MonoBehaviour
     [SerializeField]
     CarSpawner[] spawnScripts;
     // experiment stopwatch
-    private Stopwatch experimentStop = new Stopwatch();
-    private TimeSpan experimentTime = new TimeSpan();
+    private Stopwatch experimentStop = new Stopwatch ();
+    private TimeSpan experimentTime = new TimeSpan ();
 
     // pedestrian stopwatch
     private Stopwatch pedStop;
@@ -31,10 +30,11 @@ public class DataCollection : MonoBehaviour
     public GameObject spawner_south;
     public GameObject destroyer;
     CarSpawner carSpawnerNorth;
+    CarSpawner carSpawnerSouth;
     int totalCarsNorth;
     int numFastCarsNorth;
     int numNormalCarsNorth;
-    CarSpawner carSpawnerSouth;
+
     int totalCarsSouth;
     int numFastCarsSouth;
     int numNormalCarsSouth;
@@ -66,278 +66,258 @@ public class DataCollection : MonoBehaviour
     // myo
     private GameObject myo;
     private Pose _lastPose = Pose.Unknown;
-    private bool gestured;
 
     DataFileWriter fileWriter;
     bool hasLogged = false;
 
     bool startSpawning = false;
     // Use this for initialization
-    void Start()
+    void Start ()
     {
-        myo = GameObject.Find("Myo");
+        myo = GameObject.Find ("Myo");
 
-        carSpawnerNorth = spawner_north.GetComponent<CarSpawner>();
-        carSpawnerSouth = spawner_south.GetComponent<CarSpawner>();
-        carDestroy = destroyer.GetComponent<CarDestroy>();
+        carSpawnerNorth = spawner_north.GetComponent<CarSpawner> ();
+        carSpawnerSouth = spawner_south.GetComponent<CarSpawner> ();
+        carDestroy = destroyer.GetComponent<CarDestroy> ();
         increment = totalCars + 1;
-        pedStop = new Stopwatch();
-        pedStop.Start();
-        experimentStop.Start();
+        pedStop = new Stopwatch ();
+        pedStop.Start ();
+        experimentStop.Start ();
 
         fileWriter = GetComponent<DataFileWriter> ();
 
-  
-        StartCoroutine(Experiment());
+        StartCoroutine (Experiment ());
     }
-    private IEnumerator Experiment()
+    private IEnumerator Experiment ()
     {
-        UnityEngine.Debug.Log("in experiment ");
-        while (!Input.GetKey(KeyCode.Space) )
+        UnityEngine.Debug.Log ("in experiment");
+        while (!Input.GetKey (KeyCode.Space))
         {
-            yield return new WaitForEndOfFrame();
-            //Log here when you hit the space key
+            yield return new WaitForEndOfFrame ();
+            //TODO: Log here when you hit the space key
         }
-        UnityEngine.Debug.Log("hit space key");
+        UnityEngine.Debug.Log ("hit space key");
 
         //Space bar buffer
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds (.5f);
 
-        yield return StartCoroutine(MeanCrossingCalculation());
-
-   
+        yield return StartCoroutine (MeanCrossingCalculation ());
 
     }
-    private IEnumerator MeanCrossingCalculation()
+    private IEnumerator MeanCrossingCalculation ()
     {
         //code to have user walk over the street 
 
-        UnityEngine.Debug.Log("in mean calc ");
+        UnityEngine.Debug.Log ("in mean calc ");
 
         float totalTime = 0f;
         float averageTime;
 
         for (int crossCounter = 0; crossCounter < 2; crossCounter++) // press space when they're back at the origin
         {
-            while (!Input.GetKey(KeyCode.Space))
+            while (!Input.GetKey (KeyCode.Space))
             {
                 //code to have user walk over the street  4x
                 //Space bar buffer
-                yield return new WaitForSeconds(.5f);
+                yield return new WaitForSeconds (.5f);
             }
 
-            UnityEngine.Debug.Log(crossCounter.ToString());
-            pedLog += "Space bar occurred at " + pedStop.Elapsed.ToString() + "\n";
+            UnityEngine.Debug.Log (crossCounter.ToString ());
+            pedLog += "Space bar occurred at " + pedStop.Elapsed.ToString () + "\n";
 
-            yield return new WaitForSeconds(.5f);
-            UnityEngine.Debug.Log("Finished one crossing");
+            yield return new WaitForSeconds (.5f);
+            UnityEngine.Debug.Log ("Finished one crossing");
         }
 
-        UnityEngine.Debug.Log("Initial crossing logging complete");
+        UnityEngine.Debug.Log ("Initial crossing logging complete");
 
         averageTime = totalTime / 4;
-        //Todo: Log the naverager time in the logfile 
+        //TODO: Log the average time in the logfile 
 
         //get access to spawner scripts to be able to tell them to spawn stuff
         foreach (CarSpawner spwn in spawnScripts)
-        { 
-            UnityEngine.Debug.Log("spawning cars ");
-            spwn.StartSpawningCars();
+        {
+            UnityEngine.Debug.Log ("spawning cars");
+            spwn.StartSpawningCars ();
         }
 
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame ();
     }
     // Update is called once per frame
-    void Update()
+    void Update ()
     {
-        GestureCheck();
-        if (gestured)
+        if (CheckStopGesture ())
         {
-            pedLog += "Stop gesture occurred at " + pedStop.Elapsed.ToString() + "\n";
-            gestured = false;
+            pedLog += "Stop gesture occurred at " + pedStop.Elapsed.ToString () + "\n";
         }
 
         if (carDestroy.destroyCount == 4 && !hasLogged)
+        {
+            experimentTime = experimentStop.Elapsed;
+            //    pedLog += "Experiment total time: " + experimentTime.ToString() + "\n";
+            float time = Time.realtimeSinceStartup;
+            string minutes = Mathf.Floor (time / 60).ToString ("00");
+            string seconds = (time % 60).ToString ("00");
+            UnityEngine.Debug.Log (minutes + ":" + seconds);
+            pedLog += "Experiment total time:" + minutes + ":" + seconds;
+            UnityEngine.Debug.Log (pedLog);
+            fileWriter.WriteLog (pedLog);
+            hasLogged = true;
+            totalCars++;
+
+            if (GameObject.Find ("DestroyerSouth").GetComponent<CarDestroy> ().destroyCount >= 4)
             {
-                experimentTime = experimentStop.Elapsed;
-                //    pedLog += "Experiment total time: " + experimentTime.ToString() + "\n";
-                float time = Time.realtimeSinceStartup;
-                string minutes = Mathf.Floor(time / 60).ToString("00");
-                string seconds = (time % 60).ToString("00");
-                UnityEngine.Debug.Log(minutes + ":" + seconds);
-                pedLog += "Experiment total time:" + minutes + ":" + seconds;
-                UnityEngine.Debug.Log(pedLog);
-                fileWriter.WriteLog(pedLog);
-                hasLogged = true;
-                totalCars++;
+                UnityEditor.EditorApplication.isPlaying = false;
 
-                if (GameObject.Find("DestroyerSouth").GetComponent<CarDestroy>().destroyCount >= 4)
-                {
-                    UnityEditor.EditorApplication.isPlaying = false;
-
-                }
             }
-
-            totalCarsNorth = carSpawnerNorth.totalCars;
-            numFastCarsNorth = carSpawnerNorth.numFastCars;
-            numNormalCarsNorth = carSpawnerNorth.numNormalCars;
-            totalCarsSouth = carSpawnerSouth.totalCars;
-            numFastCarsSouth = carSpawnerSouth.numFastCars;
-            numNormalCarsSouth = carSpawnerSouth.numNormalCars;
-
-            totalCars = totalCarsNorth + totalCarsSouth;
-            totalFastCars = numFastCarsNorth + numFastCarsSouth;
-            totalNormalCars = numNormalCarsNorth + numNormalCarsSouth;
-
-            if (totalCars % 2 == 1)
-            {
-                carOrigin = "north";
-            }
-            else
-            {
-                carOrigin = "south";
-            }
-
-            if (carSpawnerNorth.carSpeed.Equals("fast") || carSpawnerSouth.carSpeed.Equals("fast"))
-            {
-                carSpeed = "fast";
-            }
-            if (carSpawnerNorth.carSpeed.Equals("normal") || carSpawnerSouth.carSpeed.Equals("normal"))
-            {
-                carSpeed = "normal";
-            }
-
-            if (carSpawnerNorth.gesture || carSpawnerSouth.gesture)
-            {
-                carType = "gesture";
-            }
-            if (carSpawnerNorth.sensor || carSpawnerSouth.sensor)
-            {
-                carType = "sensor";
-            }
-            if (carSpawnerNorth.driver || carSpawnerSouth.driver)
-            {
-                carType = "driver";
-            }
-
-            if (carOrigin.Equals("north"))
-            {
-                car = carSpawnerNorth.instantiatedCar;
-                if (carType.Equals("gesture"))
-                {
-                    gesturePathManager = car.GetComponent<GesturePathManager>() as GesturePathManager;
-                }
-                if (carType.Equals("sensor"))
-                {
-                    sensorPathManager = car.GetComponent<SensorPathManager>() as SensorPathManager;
-                }
-                if (carType.Equals("driver"))
-                {
-                    driverPathManager = car.GetComponent<DriverPathManager>() as DriverPathManager;
-                }
-            }
-            if (carOrigin.Equals("south"))
-            {
-                car = carSpawnerSouth.instantiatedCar;
-                if (carType.Equals("gesture"))
-                {
-                    gesturePathManager = car.GetComponent<GesturePathManager>() as GesturePathManager;
-                }
-                if (carType.Equals("sensor"))
-                {
-                    sensorPathManager = car.GetComponent<SensorPathManager>() as SensorPathManager;
-                }
-                if (carType.Equals("driver"))
-                {
-                    driverPathManager = car.GetComponent<DriverPathManager>() as DriverPathManager;
-                }
-            }
-
-
-
-            // only occurs when a new car is spawned
-            if (totalCars == increment)
-            {
-                stopwatch = new Stopwatch();
-                stopwatch.Start();
-                // UnityEngine.Debug.Log("new stopwatch created and started");
-                doOnce = false;
-
-                pedLog += CarID();
-                // UnityEngine.Debug.Log(CarID());
-                increment++;
-            }
-
-            if (carType.Equals("gesture"))
-            {
-                slowingTime = gesturePathManager.slowdownPathTime;
-                if (gesturePathManager.slowing)
-                {
-                    timespanUntilSlowing = stopwatch.Elapsed;
-                    slowing = true;
-                }
-            }
-            if (carType.Equals("sensor"))
-            {
-                slowingTime = sensorPathManager.slowdownPathTime;
-                if (sensorPathManager.slowing)
-                {
-                    timespanUntilSlowing = stopwatch.Elapsed;
-                    slowing = true;
-                }
-            }
-            if (carType.Equals("driver"))
-            {
-                slowingTime = driverPathManager.slowdownPathTime;
-                if (driverPathManager.slowing)
-                {
-                    timespanUntilSlowing = stopwatch.Elapsed;
-                    slowing = true;
-                    //UnityEngine.Debug.Log("slowing is " + slowing);
-                }
-            }
-
-            stoppedTime = 12;
-
-            if (slowing && !doOnce)
-            {
-                timeUntilSlowing = timespanUntilSlowing.ToString();
-                pedLog += "Time before slowing: " + timeUntilSlowing + "\n";
-                pedLog += "Time slowing: " + slowingTime + "\n";
-                pedLog += "Time stopped: " + stoppedTime + "\n";
-                //UnityEngine.Debug.Log("Time before slowing: " + timeUntilSlowing);
-                //UnityEngine.Debug.Log("Time slowing: " + slowingTime);
-                //UnityEngine.Debug.Log("Time stopped: " + stoppedTime);
-                doOnce = true;
-                slowing = false;
-            }
-
-            carCollisionDetection = car.GetComponentInChildren<CarCollisionDetection>() as CarCollisionDetection;
-            if (carCollisionDetection.collisionDetected)
-            {
-                pedestrianCollision = true;
-            }
-
-            if (pedestrianCollision)
-            {
-                TimeSpan collisionTime = pedStop.Elapsed;
-                pedLog += "pedestrian and car collided at " + collisionTime.ToString() + "\n";
-                //UnityEngine.Debug.Log("pedestrian and car collided at " + collisionTime.ToString());
-                pedestrianCollision = false;
-            
         }
+
+        totalCarsNorth = carSpawnerNorth.totalCars;
+        numFastCarsNorth = carSpawnerNorth.numFastCars;
+        numNormalCarsNorth = carSpawnerNorth.numNormalCars;
+        totalCarsSouth = carSpawnerSouth.totalCars;
+        numFastCarsSouth = carSpawnerSouth.numFastCars;
+        numNormalCarsSouth = carSpawnerSouth.numNormalCars;
+
+        totalCars = totalCarsNorth + totalCarsSouth;
+        totalFastCars = numFastCarsNorth + numFastCarsSouth;
+        totalNormalCars = numNormalCarsNorth + numNormalCarsSouth;
+
+        if (totalCars % 2 == 1)
+        {
+            carOrigin = "north";
+        }
+        else
+        {
+            carOrigin = "south";
+        }
+
+        if (carSpawnerNorth.carSpeed.Equals ("fast") || carSpawnerSouth.carSpeed.Equals ("fast"))
+        {
+            carSpeed = "fast";
+        }
+        if (carSpawnerNorth.carSpeed.Equals ("normal") || carSpawnerSouth.carSpeed.Equals ("normal"))
+        {
+            carSpeed = "normal";
+        }
+
+        if (carSpawnerNorth.gesture || carSpawnerSouth.gesture)
+        {
+            carType = "gesture";
+        }
+        if (carSpawnerNorth.sensor || carSpawnerSouth.sensor)
+        {
+            carType = "sensor";
+        }
+        if (carSpawnerNorth.driver || carSpawnerSouth.driver)
+        {
+            carType = "driver";
+        }
+
+        if (carOrigin.Equals ("north"))
+        {
+            car = carSpawnerNorth.instantiatedCar;
+        }
+        else
+        {
+            car = carSpawnerSouth.instantiatedCar;
+        }
+
+        switch (carType)
+        {
+            case ("gesture"):
+                gesturePathManager = car.GetComponent<GesturePathManager> () as GesturePathManager;
+                break;
+
+            case ("sensor"):
+                sensorPathManager = car.GetComponent<SensorPathManager> () as SensorPathManager;
+                break;
+
+            case ("driver"):
+                driverPathManager = car.GetComponent<DriverPathManager> () as DriverPathManager;
+                break;
+
+            default: break;
+
+        }
+
+        // only occurs when a new car is spawned
+        if (totalCars == increment)
+        {
+            stopwatch = new Stopwatch ();
+            stopwatch.Start ();
+            // UnityEngine.Debug.Log("new stopwatch created and started");
+            doOnce = false;
+
+            pedLog += GetCarID ();
+            // UnityEngine.Debug.Log(CarID());
+            increment++;
+        }
+
+        if (carType.Equals ("gesture"))
+        {
+            slowingTime = gesturePathManager.slowdownPathTime;
+            if (gesturePathManager.slowing)
+            {
+                timespanUntilSlowing = stopwatch.Elapsed;
+                slowing = true;
+            }
+        }
+        else if (carType.Equals ("sensor"))
+        {
+            slowingTime = sensorPathManager.slowdownPathTime;
+            if (sensorPathManager.slowing)
+            {
+                timespanUntilSlowing = stopwatch.Elapsed;
+                slowing = true;
+            }
+        }
+        else if (carType.Equals ("driver"))
+        {
+            slowingTime = driverPathManager.slowdownPathTime;
+            if (driverPathManager.slowing)
+            {
+                timespanUntilSlowing = stopwatch.Elapsed;
+                slowing = true;
+                //UnityEngine.Debug.Log("slowing is " + slowing);
+            }
+        }
+
+        stoppedTime = 12;
+
+        if (slowing && !doOnce)
+        {
+            timeUntilSlowing = timespanUntilSlowing.ToString ();
+            pedLog += "Time before slowing: " + timeUntilSlowing + "\n";
+            pedLog += "Time slowing: " + slowingTime + "\n";
+            pedLog += "Time stopped: " + stoppedTime + "\n";
+            //UnityEngine.Debug.Log("Time before slowing: " + timeUntilSlowing);
+            //UnityEngine.Debug.Log("Time slowing: " + slowingTime);
+            //UnityEngine.Debug.Log("Time stopped: " + stoppedTime);
+            doOnce = true;
+            slowing = false;
+        }
+
+        carCollisionDetection = car.GetComponentInChildren<CarCollisionDetection> () as CarCollisionDetection;
+        if (carCollisionDetection.collisionDetected)
+        {
+            TimeSpan collisionTime = pedStop.Elapsed;
+            pedLog += "pedestrian and car collided at " + collisionTime.ToString () + "\n";
+            //UnityEngine.Debug.Log("pedestrian and car collided at " + collisionTime.ToString());
+        }
+
     }
 
-    public void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter ( Collider other )
     {
         // where the pedestrian starts
         if (other.tag == "crossing_a")
         {
             pedTime = pedStop.Elapsed;
-            behavior = "Entered A at " + pedTime.ToString() + "\n";
+            behavior = "Entered A at " + pedTime.ToString () + "\n";
             pedLog += behavior;
             //UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
-            UnityEngine.Debug.Log("in A");
+            UnityEngine.Debug.Log ("in A");
         }
         // other side of the street
         if (other.tag == "crossing_b")
@@ -346,39 +326,39 @@ public class DataCollection : MonoBehaviour
 
             pedTime = pedStop.Elapsed;
             pedLog += behavior;
-            behavior = "Entered B at " + pedTime.ToString() + "\n";
+            behavior = "Entered B at " + pedTime.ToString () + "\n";
             // UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
-            UnityEngine.Debug.Log("in B");
+            UnityEngine.Debug.Log ("in B");
         }
     }
 
-public void OnTriggerExit(Collider other)
-{
-    // where the pedestrian starts
-    if (other.tag == "crossing_a")
+    public void OnTriggerExit ( Collider other )
     {
-        // Debug.Log("leaving A");
+        // where the pedestrian starts
+        if (other.tag == "crossing_a")
+        {
+            // Debug.Log("leaving A");
 
-        pedTime = pedStop.Elapsed;
-        pedLog += behavior;
-        behavior = "Exited A at " + pedTime.ToString() + "\n";
-        // UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
+            pedTime = pedStop.Elapsed;
+            pedLog += behavior;
+            behavior = "Exited A at " + pedTime.ToString () + "\n";
+            // UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
+        }
+        // other side of the street
+        if (other.tag == "crossing_b")
+        {
+            // Debug.Log("leaving B");
+
+            pedTime = pedStop.Elapsed;
+            pedLog += behavior;
+            behavior = "Exited B at " + pedTime.ToString () + "\n";
+            // UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
+        }
     }
-    // other side of the street
-    if (other.tag == "crossing_b")
-    {
-        // Debug.Log("leaving B");
 
-        pedTime = pedStop.Elapsed;
-        pedLog += behavior;
-        behavior = "Exited B at " + pedTime.ToString() + "\n";
-        // UnityEngine.Debug.Log("pedestrian behavior: " + behavior);
-    }
-}
-
-    void GestureCheck()
+    bool CheckStopGesture ()
     {
-        ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo>();
+        ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo> ();
 
         if (thalmicMyo.pose != _lastPose)
         {
@@ -386,14 +366,15 @@ public void OnTriggerExit(Collider other)
 
             if (thalmicMyo.pose == Pose.FingersSpread)
             {
-                UnityEngine.Debug.Log("Stop gesture");
-                
-                gestured = true;
+                UnityEngine.Debug.Log ("Stop gesture");
+
+                return true;
             }
         }
+        return false;
     }
 
-    public string CarID()
+    public string GetCarID ()
     {
         string result = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
         result += "Car number: " + totalCars + "\n";
@@ -404,7 +385,8 @@ public void OnTriggerExit(Collider other)
         return result;
     }
 
-    public string PedLog() {
+    public string GetPedLog ()
+    {
         return pedLog;
     }
 }

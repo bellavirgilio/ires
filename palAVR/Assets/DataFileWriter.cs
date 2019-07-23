@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
-using UnityEditor;
 using System.IO;
 
 public class DataFileWriter : MonoBehaviour
@@ -23,7 +20,7 @@ public class DataFileWriter : MonoBehaviour
 
     void Start()
     {
-        dataCollection = GameObject.FindWithTag("PedCamera").GetComponent<DataCollection>() as DataCollection;
+        dataCollection = GetComponent<DataCollection>() as DataCollection;
         fileName = string.Format ("{0}_@_ {1} ", participantNumber.ToString (), DateTime.Now.ToString ("dd-MM-HH-mm"));
         filePath = Application.dataPath;
 
@@ -36,18 +33,17 @@ public class DataFileWriter : MonoBehaviour
 
     void Update()
     {
-    //    int totalCars = dataCollection.totalCars;
+        int totalCars = dataCollection.totalCars;
 
-    //    if (dataCollection.totalCars == 8)
-    //    {
-    //        log = dataCollection.PedLog();
-    //        if (!logged)
-    //            WriteLog ();
-    //        //Debug.Log(log);
+        if (dataCollection.totalCars == 8)
+        {
+            if (!logged)
+                WriteLog (dataCollection.GetPedLog ());
+            //Debug.Log(log);
 
-    //        totalCars++;
-    //    }
-   }
+            totalCars++;
+        }
+    }
 
     public void WriteLog(string log)
     {

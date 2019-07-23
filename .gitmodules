@@ -1,0 +1,6 @@
+[submodule "palAVR/Assets/VRTK"]
+	path = palAVR/Assets/VRTK
+	url = https://github.com/ExtendRealityLtd/VRTK.git
+[submodule "palAVR/Assets/MyoUnity"]
+	path = palAVR/Assets/MyoUnity
+	url = https://github.com/thalmiclabs/myo-unity.git
