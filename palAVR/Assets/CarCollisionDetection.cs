@@ -2,29 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarCollisionDetection : MonoBehaviour {
+namespace VRoad
+{
 
-	public bool collisionDetected;
-
-	public void OnTriggerEnter(Collider other)
+    public class CarCollisionDetection : MonoBehaviour
     {
-        // where the pedestrian starts
-		if (other.tag.Equals("PedCamera"))
-        {
-			collisionDetected = true;
-			//Debug.Log("Pedestrian collided with car");
-		}
-	}
 
-	public void OnTriggerExit(Collider other)
-	{
-		// where the pedestrian starts
-        if (other.tag.Equals("PedCamera"))
+        public bool collisionDetected;
+
+        public void OnTriggerEnter ( Collider other )
         {
-            collisionDetected = false;
-			//Debug.Log("Pedestrian and car no longer in contact");
+            // where the pedestrian starts
+            if (other.tag.Equals ("PedCamera"))
+            {
+                collisionDetected = true;
+                //Debug.Log("Pedestrian collided with car");
+            }
         }
-	}
 
-    // test to see if this works, then access the public variable from the car's chassis and record the elapsed time of the collision
+        public void OnTriggerExit ( Collider other )
+        {
+            // where the pedestrian starts
+            if (other.tag.Equals ("PedCamera"))
+            {
+                collisionDetected = false;
+                //Debug.Log("Pedestrian and car no longer in contact");
+            }
+        }
+
+        // test to see if this works, then access the public variable from the car's chassis and record the elapsed time of the collision
+    }
 }
